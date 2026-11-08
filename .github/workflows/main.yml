@@ -1,0 +1,57 @@
+name: Deploy completo JAGUAR
+
+on:
+  
+  workflow_dispatch:   # SOLO ATTIVAZIONE MANUALE
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, bcmath, pdo, pdo_mysql, openssl
+          coverage: none
+
+      - name: Install Composer dependencies
+        run: |
+          composer install \
+            --no-dev \
+            --optimize-autoloader \
+            --no-interaction \
+            --prefer-dist
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Build assets Vite
+        run: |
+          npm ci
+          npm run build
+      - name: Deploy Laravel via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.0
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./
+          server-dir: www.labsoftware.it/project/jaguar/
+          protocol: ftp
+          passive: true
+          disable_epsv: true
+          force: true
+          exclude: |
+            **/.git/**
+            **/node_modules/**
+            **/tests/**
+            **/storage/logs/**
+            **/.github/**
+            **/.env**
+          dangerous-clean-slate: false
