@@ -13,7 +13,7 @@
         <div class="mx-auto flex max-w-7xl items-center justify-between border-b border-white/20 bg-stone-950/45 px-6 py-4 backdrop-blur-md lg:px-8">
             <a href="{{ route('home') }}" class="text-xl font-semibold tracking-[0.18em]">
                 @if (! empty($siteSettings['logo']))
-                    <img src="{{ Storage::url($siteSettings['logo']) }}" alt="{{ $siteSettings['company_name'] ?? 'Logo aziendale' }}" class="h-10 w-auto">
+                    <img src="{{ Storage::disk('public')->url($siteSettings['logo']) }}" alt="{{ $siteSettings['company_name'] ?? 'Logo aziendale' }}" class="h-10 w-auto">
                 @else
                     {{ $siteSettings['company_name'] ?? config('app.name') }}
                 @endif
