@@ -1,8 +1,11 @@
 name: Deploy completo JAGUAR
 
 on:
-  
-  workflow_dispatch:   # SOLO ATTIVAZIONE MANUALE
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-aruba
+  cancel-in-progress: false
 
 jobs:
   deploy:
@@ -24,17 +27,21 @@ jobs:
           composer install \
             --no-dev \
             --optimize-autoloader \
+            --classmap-authoritative \
             --no-interaction \
             --prefer-dist
+
       - name: Install Node
         uses: actions/setup-node@v4
         with:
           node-version: 22
+          cache: npm
 
       - name: Build assets Vite
         run: |
           npm ci
           npm run build
+
       - name: Deploy Laravel via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.0
         with:
@@ -42,16 +49,27 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./
-          server-dir: www.labsoftware.it/project/jaguar/
+          server-dir: /www.labsoftware.it/project/jaguar/
           protocol: ftp
           passive: true
           disable_epsv: true
-          force: true
+          log-level: verbose
+          state-name: .ftp-deploy-sync-state.json
           exclude: |
             **/.git/**
+            **/.github/**
+            **/.idea/**
+            **/.vscode/**
             **/node_modules/**
             **/tests/**
+            **/storage/framework/cache/data/**
+            **/storage/framework/sessions/**
+            **/storage/framework/views/**
             **/storage/logs/**
-            **/.github/**
             **/.env**
+            **/.env.*
+            **/phpunit.xml
+            **/.DS_Store
+            **/npm-debug.log*
+            **/yarn-error.log*
           dangerous-clean-slate: false
