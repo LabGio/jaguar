@@ -1,15 +1,56 @@
 @extends('layouts.public')
 @section('content')
-<section class="relative isolate flex min-h-[44rem] items-end overflow-hidden bg-stone-950 px-6 pb-20 pt-32 text-white lg:px-8">
+<section class="hero">
     @if (! empty($settings['hero_video']))
-        <video class="absolute inset-0 -z-10 h-full w-full object-cover opacity-70" autoplay muted loop playsinline poster="{{ ! empty($settings['hero_fallback']) ? Storage::disk('public')->url($settings['hero_fallback']) : '' }}"><source src="{{ Storage::disk('public')->url($settings['hero_video']) }}"></video>
+        <video class="hero-media" autoplay muted loop playsinline preload="metadata" poster="{{ ! empty($settings['hero_fallback']) ? Storage::disk('public')->url($settings['hero_fallback']) : '' }}" data-hero-video><source src="{{ Storage::disk('public')->url($settings['hero_video']) }}"></video>
     @elseif (! empty($settings['hero_fallback']))
-        <img class="absolute inset-0 -z-10 h-full w-full object-cover opacity-70" src="{{ Storage::disk('public')->url($settings['hero_fallback']) }}" alt="">
+        <img class="hero-media" src="{{ Storage::disk('public')->url($settings['hero_fallback']) }}" alt="" fetchpriority="high">
     @endif
-    <div class="absolute inset-0 -z-10 bg-gradient-to-t from-stone-950 via-stone-950/30"></div>
-    <div class="mx-auto w-full max-w-7xl"><p class="text-sm font-medium uppercase tracking-[0.3em] text-stone-300">Calzature · Made in Italy</p><h1 class="mt-5 max-w-4xl text-5xl font-semibold tracking-tight sm:text-7xl">{{ $settings['hero_title'] ?? 'L’eccellenza prende forma.' }}</h1><p class="mt-6 max-w-xl text-lg leading-8 text-stone-200">{{ $settings['hero_subtitle'] ?? 'Una presenza digitale progettata per raccontare la qualità, i materiali e le collezioni della vostra azienda.' }}</p></div>
+    <div class="hero-shade"></div>
+    <div class="wrap hero-content">
+        <p class="eyebrow light">Calzature · Made in Italy</p>
+        <h1>{{ $settings['hero_title'] ?? 'L’eccellenza prende forma.' }}</h1>
+        <p class="hero-subtitle">{{ $settings['hero_subtitle'] ?? 'Una presenza digitale progettata per raccontare la qualità, i materiali e le collezioni della vostra azienda.' }}</p>
+        @if ($collections->isNotEmpty())<a class="text-link light-link" href="#collezioni">Esplora le collezioni <span aria-hidden="true">↘</span></a>@endif
+    </div>
+    <span class="hero-index" aria-hidden="true">01 / Jaguar</span>
 </section>
-<section class="mx-auto grid max-w-7xl gap-10 px-6 py-24 lg:grid-cols-[1fr_2fr] lg:px-8"><p class="text-sm font-semibold uppercase tracking-[0.2em] text-stone-500">Azienda</p><div><h2 class="text-3xl font-semibold tracking-tight sm:text-5xl">{{ $settings['homepage_intro_title'] ?? 'Esperienza, ricerca e manifattura.' }}</h2><p class="mt-6 max-w-3xl whitespace-pre-line text-lg leading-8 text-stone-600">{{ $settings['homepage_intro_text'] ?? 'Aggiornate questa sezione dall’area amministrativa per presentare l’identità della vostra azienda.' }}</p></div></section>
-<section class="bg-stone-200 px-6 py-24 lg:px-8"><div class="mx-auto max-w-7xl"><div class="flex items-end justify-between"><div><p class="text-sm font-semibold uppercase tracking-[0.2em] text-stone-500">In evidenza</p><h2 class="mt-2 text-3xl font-semibold sm:text-4xl">Ultime collezioni</h2></div></div><div class="mt-10 grid gap-5 md:grid-cols-3">@forelse ($collections as $collection)<a href="{{ route('pages.show', ['page' => $collection->slug]) }}" class="group overflow-hidden bg-stone-950 text-white"><img src="{{ Storage::disk('public')->url($collection->cover_image_path) }}" alt="" class="aspect-[4/5] w-full object-cover transition duration-500 group-hover:scale-105"><div class="p-5"><h3 class="text-xl font-semibold">{{ $collection->title }}</h3><p class="mt-2 text-sm text-stone-300">{{ $collection->intro }}</p></div></a>@empty<p class="text-stone-600">Le collezioni pubblicate con una copertina compariranno qui.</p>@endforelse</div></div></section>
-<section class="mx-auto max-w-7xl px-6 py-24 lg:px-8"><div class="grid gap-8 md:grid-cols-3">@foreach ([['01', 'Manifattura', 'Cura rigorosa in ogni passaggio produttivo.'], ['02', 'Materiali', 'Selezione attenta di pellami, componenti e finiture.'], ['03', 'Ricerca', 'Collezioni contemporanee con identità riconoscibile.']] as [$number, $title, $text])<article class="border-t border-stone-300 pt-5"><span class="text-sm text-stone-500">{{ $number }}</span><h3 class="mt-5 text-2xl font-semibold">{{ $title }}</h3><p class="mt-3 leading-7 text-stone-600">{{ $text }}</p></article>@endforeach</div></section>
+
+<section class="intro-section wrap section-space" data-reveal>
+    <div><p class="eyebrow">La nostra identità</p><span class="section-number">01 — Azienda</span></div>
+    <div class="intro-copy">
+        <h2>{{ $settings['homepage_intro_title'] ?? 'Esperienza, ricerca e manifattura.' }}</h2>
+        <p class="body-copy preserve-lines">{{ $settings['homepage_intro_text'] ?? 'Aggiornate questa sezione dall’area amministrativa per presentare l’identità della vostra azienda.' }}</p>
+    </div>
+</section>
+
+<section id="collezioni" class="collections-section section-space">
+    <div class="wrap">
+        <div class="section-heading" data-reveal>
+            <div><p class="eyebrow">Una storia da indossare</p><h2>Le collezioni</h2></div>
+            <span class="section-number">02 — Collezioni</span>
+        </div>
+        <div class="collection-grid">
+            @forelse ($collections as $collection)
+                <a href="{{ route('pages.show', ['page' => $collection->slug]) }}" class="collection-card" data-reveal>
+                    <div class="collection-image"><img src="{{ Storage::disk('public')->url($collection->cover_image_path) }}" alt="" loading="lazy"></div>
+                    <div class="collection-caption"><div><span class="eyebrow">Collezione / {{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span><h3>{{ $collection->title }}</h3>@if ($collection->intro)<p>{{ $collection->intro }}</p>@endif</div><span class="card-arrow" aria-hidden="true">↗</span></div>
+                </a>
+            @empty
+                <p class="body-copy">Le collezioni pubblicate con una copertina compariranno qui.</p>
+            @endforelse
+        </div>
+    </div>
+</section>
+
+<section class="craft-section section-space">
+    <div class="wrap">
+        <div class="craft-heading" data-reveal><p class="eyebrow light">Il valore del saper fare</p><h2>La cura è nei dettagli.</h2><span class="section-number">03 — Manifattura</span></div>
+        <div class="craft-grid">
+            @foreach ([['01', 'Manifattura', 'Cura rigorosa in ogni passaggio produttivo.'], ['02', 'Materiali', 'Selezione attenta di pellami, componenti e finiture.'], ['03', 'Ricerca', 'Collezioni contemporanee con identità riconoscibile.']] as [$number, $title, $text])
+                <article data-reveal><span>{{ $number }}</span><h3>{{ $title }}</h3><p>{{ $text }}</p></article>
+            @endforeach
+        </div>
+    </div>
+</section>
 @endsection

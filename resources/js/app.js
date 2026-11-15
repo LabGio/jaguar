@@ -1,13 +1,57 @@
-document.querySelector('[data-menu-toggle]')?.addEventListener('click', (event) => {
-    const menu = document.querySelector('[data-mobile-menu]');
-    const isOpen = !menu.classList.contains('hidden');
+const menuToggle = document.querySelector('[data-menu-toggle]');
+const mobileMenu = document.querySelector('[data-mobile-menu]');
+const siteHeader = document.querySelector('[data-site-header]');
 
-    menu.classList.toggle('hidden', isOpen);
-    event.currentTarget.setAttribute('aria-expanded', String(!isOpen));
+function setMenuOpen(isOpen) {
+    mobileMenu?.classList.toggle('hidden', !isOpen);
+    siteHeader?.classList.toggle('menu-open', isOpen);
+    menuToggle?.setAttribute('aria-expanded', String(isOpen));
+}
+
+menuToggle?.addEventListener('click', () => {
+    setMenuOpen(menuToggle.getAttribute('aria-expanded') !== 'true');
 });
+
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && menuToggle?.getAttribute('aria-expanded') === 'true') {
+        setMenuOpen(false);
+        menuToggle.focus();
+    }
+});
+
+if (siteHeader) {
+    const updateHeader = () => siteHeader.classList.toggle('is-scrolled', window.scrollY > 40);
+    updateHeader();
+    window.addEventListener('scroll', updateHeader, { passive: true });
+}
+
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+const heroVideo = document.querySelector('[data-hero-video]');
+if (heroVideo && reducedMotion.matches) heroVideo.pause();
+
+if ('IntersectionObserver' in window && !reducedMotion.matches) {
+    const revealElements = document.querySelectorAll('[data-reveal]');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+    document.body.classList.add('js-reveal');
+    revealElements.forEach((element) => observer.observe(element));
+}
 
 const dialog = document.querySelector('[data-lightbox]');
 const lightboxContent = document.querySelector('[data-lightbox-content]');
+
+dialog?.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+        event.preventDefault();
+        dialog.close();
+    }
+});
 
 document.querySelectorAll('[data-lightbox-image]').forEach((button) => {
     button.addEventListener('click', () => {
