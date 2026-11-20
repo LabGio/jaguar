@@ -48,6 +48,54 @@ class AdminPageManagementTest extends TestCase
         ])->assertSessionHasErrors('hero_video_mobile');
     }
 
+    public function test_invalid_hero_video_shows_a_useful_error(): void
+    {
+        $admin = User::factory()->make(['role' => 'admin']);
+
+        $this->actingAs($admin)->from(route('admin.settings.edit'))->put(route('admin.settings.update'), [
+            'hero_video_mobile' => UploadedFile::fake()->create('invalid.txt', 1, 'text/plain'),
+        ])->assertRedirect(route('admin.settings.edit'))
+            ->assertSessionHasErrors(['hero_video_mobile' => 'Il video smartphone deve essere un file MP4 o WebM valido.']);
+    }
+
+    public function test_failed_hero_video_upload_shows_server_limit_guidance(): void
+    {
+        $admin = User::factory()->make(['role' => 'admin']);
+        $file = UploadedFile::fake()->create('desktop.mp4', 1, 'video/mp4');
+        $failedUpload = new UploadedFile($file->getPathname(), 'desktop.mp4', 'video/mp4', UPLOAD_ERR_INI_SIZE, true);
+
+        $this->actingAs($admin)->from(route('admin.settings.edit'))->put(route('admin.settings.update'), [
+            'hero_video' => $failedUpload,
+        ])->assertRedirect(route('admin.settings.edit'))
+            ->assertSessionHasErrors(['hero_video' => 'Il caricamento del video desktop non è riuscito. Verifica le dimensioni del file e i limiti di caricamento del server.']);
+    }
+
+    public function test_hero_video_over_application_limit_shows_the_maximum_size(): void
+    {
+        $admin = User::factory()->make(['role' => 'admin']);
+
+        $this->actingAs($admin)->put(route('admin.settings.update'), [
+            'hero_video' => UploadedFile::fake()->create('desktop.mp4', 51201, 'video/mp4'),
+        ])->assertSessionHasErrors(['hero_video' => 'Il video desktop non può superare 50 MB.']);
+    }
+
+    public function test_oversized_settings_request_shows_a_recovery_page(): void
+    {
+        $this->call('POST', route('admin.settings.update'), server: ['CONTENT_LENGTH' => PHP_INT_MAX])
+            ->assertStatus(413)
+            ->assertSee('Le impostazioni non sono state salvate.')
+            ->assertSee('Torna alle impostazioni')
+            ->assertSee(route('admin.settings.edit'));
+    }
+
+    public function test_oversized_settings_json_request_keeps_json_response(): void
+    {
+        $this->call('POST', route('admin.settings.update'), server: [
+            'CONTENT_LENGTH' => PHP_INT_MAX,
+            'HTTP_ACCEPT' => 'application/json',
+        ])->assertStatus(413)->assertHeader('Content-Type', 'application/json');
+    }
+
     public function test_guest_is_redirected_from_administration(): void
     {
         $this->get(route('admin.dashboard'))->assertRedirect(route('login'));

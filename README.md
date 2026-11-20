@@ -19,7 +19,10 @@ poster durante il caricamento e quando non sono presenti video.
 I limiti del server possono essere inferiori: per caricare entrambi i video da
 50 MB nella stessa richiesta, configurare PHP con `upload_max_filesize` almeno
 `50M` e `post_max_size` maggiore di `100M`, oltre agli eventuali limiti del
-server web.
+server web. L'area amministrativa segnala gli errori di formato e caricamento;
+se PHP rifiuta una richiesta troppo grande, suggerisce di caricare un video alla
+volta. Un eventuale blocco imposto direttamente dal server web può invece
+comparire prima che l'applicazione riesca a mostrare il proprio messaggio.
 
 ## Contenuti dal vecchio WordPress
 

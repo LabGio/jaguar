@@ -20,7 +20,7 @@
         </aside>
         <main class="p-6 lg:p-10">
             @if (session('status'))<div class="mb-6 rounded border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">{{ session('status') }}</div>@endif
-            @if ($errors->any())<div class="mb-6 rounded border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800"><ul class="list-inside list-disc">@foreach ($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul></div>@endif
+            @if ($errors->any())<div role="alert" class="mb-6 rounded border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800"><p class="mb-2 font-semibold">Operazione non riuscita: controlla i seguenti errori.</p><ul class="list-inside list-disc">@foreach ($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul></div>@endif
             @yield('content')
         </main>
     </div>

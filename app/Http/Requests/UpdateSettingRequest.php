@@ -34,4 +34,18 @@ class UpdateSettingRequest extends FormRequest
             'hero_video_mobile' => ['nullable', 'file', 'mimetypes:video/mp4,video/webm', 'extensions:mp4,webm', 'max:51200'],
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'hero_video.uploaded' => 'Il caricamento del video desktop non è riuscito. Verifica le dimensioni del file e i limiti di caricamento del server.',
+            'hero_video.mimetypes' => 'Il video desktop deve essere un file MP4 o WebM valido.',
+            'hero_video.extensions' => 'Il video desktop deve avere estensione .mp4 o .webm.',
+            'hero_video.max' => 'Il video desktop non può superare 50 MB.',
+            'hero_video_mobile.uploaded' => 'Il caricamento del video smartphone non è riuscito. Verifica le dimensioni del file e i limiti di caricamento del server.',
+            'hero_video_mobile.mimetypes' => 'Il video smartphone deve essere un file MP4 o WebM valido.',
+            'hero_video_mobile.extensions' => 'Il video smartphone deve avere estensione .mp4 o .webm.',
+            'hero_video_mobile.max' => 'Il video smartphone non può superare 50 MB.',
+        ];
+    }
 }
