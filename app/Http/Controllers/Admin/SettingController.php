@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateSettingRequest;
 use App\Services\ImageService;
 use App\Services\SiteSettings;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
@@ -18,7 +19,7 @@ class SettingController extends Controller
         return view('admin.settings.edit', ['settings' => $settings->all()]);
     }
 
-    public function update(UpdateSettingRequest $request, SiteSettings $settings, ImageService $images): RedirectResponse
+    public function update(UpdateSettingRequest $request, SiteSettings $settings, ImageService $images): RedirectResponse|JsonResponse
     {
         $data = $request->safe()->except(['logo', 'hero_fallback', 'hero_video', 'hero_video_mobile']);
         $current = $settings->all();
@@ -54,6 +55,10 @@ class SettingController extends Controller
             if (! Storage::disk('public')->delete($path)) {
                 throw new RuntimeException("Impossibile eliminare il video sostituito: {$path}");
             }
+        }
+
+        if ($request->expectsJson()) {
+            return response()->json(['saved' => true]);
         }
 
         return back()->with('status', 'Impostazioni salvate.');

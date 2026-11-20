@@ -11,15 +11,20 @@
 
 In **Impostazioni sito** si possono caricare un video hero per desktop e tablet
 (consigliato 1920 × 1080) e uno per smartphone (consigliato 720 × 1280).
+Selezionare ogni video e premere **Carica file**: il video viene salvato subito
+e la pagina mostra avanzamento ed eventuali errori. Le altre modifiche vanno
+salvate separatamente con **Salva impostazioni**. Senza JavaScript i video
+vengono inviati insieme alle impostazioni.
 Sono accettati MP4 e WebM fino a 50 MB ciascuno. Il video mobile viene
 selezionato fino a 700 px di larghezza; se è disponibile un solo video, viene
 usato su tutti i dispositivi. Senza JavaScript viene usato il video desktop,
 oppure quello mobile se è l'unico disponibile. L'immagine fallback è usata come
 poster durante il caricamento e quando non sono presenti video.
-I limiti del server possono essere inferiori: per caricare entrambi i video da
-50 MB nella stessa richiesta, configurare PHP con `upload_max_filesize` almeno
-`50M` e `post_max_size` maggiore di `100M`, oltre agli eventuali limiti del
-server web. L'area amministrativa segnala gli errori di formato e caricamento;
+I limiti del server possono essere inferiori: per caricare un video da 50 MB,
+configurare PHP con `upload_max_filesize` almeno `50M` e `post_max_size`
+maggiore di `50M`, oltre agli eventuali limiti del server web. Senza JavaScript,
+per caricare entrambi i video nella stessa richiesta serve `post_max_size`
+maggiore di `100M`. L'area amministrativa segnala gli errori di formato e caricamento;
 se PHP rifiuta una richiesta troppo grande, suggerisce di caricare un video alla
 volta. Un eventuale blocco imposto direttamente dal server web può invece
 comparire prima che l'applicazione riesca a mostrare il proprio messaggio.

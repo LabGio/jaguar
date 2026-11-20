@@ -39,6 +39,37 @@ class AdminPageManagementTest extends TestCase
         Storage::disk('public')->assertExists([$desktop, $newMobile]);
     }
 
+    public function test_admin_can_upload_a_video_with_a_json_response_without_changing_other_settings(): void
+    {
+        Storage::fake('public');
+        $admin = User::factory()->create(['role' => 'admin']);
+        Setting::query()->create(['key' => 'hero_title', 'value' => 'Titolo esistente']);
+
+        $this->actingAs($admin)->withHeader('Accept', 'application/json')->put(route('admin.settings.update'), [
+            'hero_video' => UploadedFile::fake()->create('desktop.mp4', 100, 'video/mp4'),
+        ])->assertOk()->assertExactJson(['saved' => true]);
+
+        $path = Setting::query()->where('key', 'hero_video')->value('value');
+        Storage::disk('public')->assertExists($path);
+        $this->assertDatabaseHas('settings', ['key' => 'hero_title', 'value' => 'Titolo esistente']);
+    }
+
+    public function test_video_upload_json_response_reports_validation_errors(): void
+    {
+        $admin = User::factory()->make(['role' => 'admin']);
+
+        $this->actingAs($admin)->withHeader('Accept', 'application/json')->put(route('admin.settings.update'), [
+            'hero_video_mobile' => UploadedFile::fake()->create('invalid.txt', 1, 'text/plain'),
+        ])->assertUnprocessable()
+            ->assertJsonPath('errors.hero_video_mobile.0', 'Il video smartphone deve essere un file MP4 o WebM valido.');
+    }
+
+    public function test_video_upload_json_request_requires_authentication(): void
+    {
+        $this->withHeader('Accept', 'application/json')->put(route('admin.settings.update'))
+            ->assertUnauthorized();
+    }
+
     public function test_mobile_hero_video_rejects_invalid_files(): void
     {
         $admin = User::factory()->create(['role' => 'admin']);

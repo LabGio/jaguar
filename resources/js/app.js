@@ -42,6 +42,114 @@ if (heroVideo) {
     mobileViewport.addEventListener('change', updateHeroVideo);
 }
 
+const settingsForm = document.querySelector('[data-settings-form]');
+if (settingsForm) {
+    const uploads = Array.from(settingsForm.querySelectorAll('[data-video-upload]'), (container) => ({
+        file: container.querySelector('[data-video-file]'),
+        button: container.querySelector('[data-video-button]'),
+        progress: container.querySelector('[data-video-progress]'),
+        status: container.querySelector('[data-video-status]'),
+    }));
+    const saveButton = settingsForm.querySelector('[data-settings-save]');
+    let uploading = false;
+
+    const showStatus = (upload, message, isError = false) => {
+        upload.status.textContent = message;
+        upload.status.classList.toggle('text-red-700', isError);
+    };
+
+    const setUploading = (active) => {
+        uploading = active;
+        saveButton.disabled = active;
+        uploads.forEach(({ button, file }) => {
+            button.disabled = active;
+            file.disabled = active;
+        });
+    };
+
+    settingsForm.addEventListener('submit', (event) => {
+        if (uploading || uploads.some(({ file }) => file.files.length > 0)) {
+            event.preventDefault();
+            uploads.filter(({ file }) => file.files.length > 0).forEach((upload) => {
+                showStatus(upload, 'Premi «Carica file» prima di salvare le altre impostazioni.', true);
+            });
+        }
+    });
+
+    uploads.forEach((upload) => {
+        upload.button.hidden = false;
+        upload.file.addEventListener('change', () => {
+            upload.progress.hidden = true;
+            showStatus(upload, '');
+        });
+        upload.button.addEventListener('click', () => {
+            const file = upload.file.files[0];
+            if (!file) {
+                showStatus(upload, 'Seleziona un video da caricare.', true);
+                return;
+            }
+            if (file.size > 50 * 1024 * 1024) {
+                showStatus(upload, 'Il video non può superare 50 MB.', true);
+                return;
+            }
+
+            const data = new FormData();
+            data.append('_token', settingsForm.querySelector('[name="_token"]').value);
+            data.append('_method', 'PUT');
+            data.append(upload.file.name, file);
+
+            const request = new XMLHttpRequest();
+            request.open('POST', settingsForm.action);
+            request.responseType = 'json';
+            request.setRequestHeader('Accept', 'application/json');
+            request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+            request.upload.addEventListener('progress', (event) => {
+                if (event.lengthComputable) {
+                    upload.progress.value = Math.round(event.loaded / event.total * 100);
+                    showStatus(upload, `Caricamento: ${upload.progress.value}%`);
+                }
+            });
+            request.upload.addEventListener('load', () => {
+                showStatus(upload, 'Caricamento completato, salvataggio in corso...');
+            });
+            request.addEventListener('load', () => {
+                setUploading(false);
+                if (request.status >= 200 && request.status < 300 && request.response?.saved === true) {
+                    upload.file.value = '';
+                    showStatus(upload, 'Video caricato e salvato.');
+                    return;
+                }
+
+                let message = `Caricamento non riuscito (HTTP ${request.status}). Verifica il server prima di riprovare.`;
+                if (request.status === 413) {
+                    message = 'Il file supera il limite di caricamento del server. Riduci il video o verifica i limiti PHP e del server web.';
+                } else if (request.status === 401 || request.status === 419) {
+                    message = 'Sessione scaduta. Accedi nuovamente e riprova.';
+                } else if (request.status === 403) {
+                    message = 'Accesso negato dal server (HTTP 403). Verifica i permessi o le protezioni del server.';
+                } else if (request.status === 422 && request.response?.errors?.[upload.file.name]) {
+                    message = request.response.errors[upload.file.name].join(' ');
+                }
+                showStatus(upload, message, true);
+            });
+            request.addEventListener('error', () => {
+                setUploading(false);
+                showStatus(upload, 'Errore di rete durante il caricamento. Verifica la connessione e riprova.', true);
+            });
+            request.addEventListener('abort', () => {
+                setUploading(false);
+                showStatus(upload, 'Caricamento interrotto.', true);
+            });
+
+            upload.progress.value = 0;
+            upload.progress.hidden = false;
+            showStatus(upload, 'Caricamento: 0%');
+            setUploading(true);
+            request.send(data);
+        });
+    });
+}
+
 if ('IntersectionObserver' in window && !reducedMotion.matches) {
     const revealElements = document.querySelectorAll('[data-reveal]');
     const observer = new IntersectionObserver((entries) => {
