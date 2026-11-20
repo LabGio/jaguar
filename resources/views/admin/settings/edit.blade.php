@@ -24,6 +24,16 @@
         <p class="text-sm text-stone-500">Video MP4 o WebM, massimo 50 MB ciascuno. Se è presente un solo video, viene usato su tutti i dispositivi.</p>
     </fieldset>
     <fieldset class="grid gap-5"><legend class="text-lg font-semibold">Footer, social e mappa</legend><label class="text-sm font-medium">Testo footer<textarea class="mt-1 w-full rounded border-stone-300" name="footer_text" rows="3">{{ old('footer_text', $settings['footer_text'] ?? '') }}</textarea></label><div class="grid gap-5 md:grid-cols-2">@foreach (['map_embed_url' => 'URL embed Google Maps', 'instagram_url' => 'Instagram URL', 'facebook_url' => 'Facebook URL', 'linkedin_url' => 'LinkedIn URL'] as $name => $label)<label class="text-sm font-medium">{{ $label }}<input class="mt-1 w-full rounded border-stone-300" type="url" name="{{ $name }}" value="{{ old($name, $settings[$name] ?? '') }}"></label>@endforeach</div></fieldset>
+    @foreach (['en' => 'Inglese', 'de' => 'Tedesco'] as $locale => $language)
+        <fieldset class="grid gap-4 rounded border border-stone-200 p-4">
+            <legend class="px-2 text-lg font-semibold">{{ $language }}</legend>
+            <p class="text-sm text-stone-500">I campi vuoti mostrano il contenuto italiano.</p>
+            @foreach (['hero_title' => 'Titolo hero', 'hero_subtitle' => 'Sottotitolo hero', 'homepage_intro_title' => 'Titolo sezione introduttiva', 'homepage_intro_text' => 'Testo introduttivo', 'footer_text' => 'Testo footer'] as $field => $label)
+                @php($name = "{$field}_{$locale}")
+                <label class="text-sm font-medium">{{ $label }}<textarea class="mt-1 w-full rounded border-stone-300" name="{{ $name }}" rows="3">{{ old($name, $settings[$name] ?? '') }}</textarea></label>
+            @endforeach
+        </fieldset>
+    @endforeach
     <div><button data-settings-save class="rounded bg-stone-950 px-5 py-3 text-sm font-semibold text-white disabled:opacity-50">Salva impostazioni</button></div>
 </form>
 @endsection

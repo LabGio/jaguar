@@ -14,13 +14,14 @@ function eventTarget(properties = {}) {
     };
 }
 
-function initializeGallery(images) {
+function initializeGallery(images, counterSeparator = 'di') {
     const galleryImages = images.map(({ src, alt }) => eventTarget({ dataset: { lightboxImage: src, lightboxAlt: alt } }));
     const lightboxContent = { src: '', alt: '' };
     const lightboxPrevious = eventTarget({ disabled: false });
     const lightboxNext = eventTarget({ disabled: false });
     const lightboxCounter = { textContent: '' };
     const dialog = eventTarget({
+        dataset: { counterSeparator },
         open: false,
         showModal() { this.open = true; },
         close() { this.open = false; },
@@ -83,4 +84,12 @@ test('disables navigation when the gallery contains one image', () => {
 
     assert.equal(lightboxPrevious.disabled, true);
     assert.equal(lightboxNext.disabled, true);
+});
+
+test('uses the localized gallery counter separator', () => {
+    const { galleryImages, lightboxCounter } = initializeGallery([{ src: '/only.webp', alt: '' }], 'von');
+
+    galleryImages[0].dispatch('click');
+
+    assert.equal(lightboxCounter.textContent, '1 von 1');
 });

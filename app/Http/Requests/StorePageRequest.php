@@ -40,7 +40,7 @@ class StorePageRequest extends FormRequest
         return [
             'title' => ['required', 'string', 'max:255'],
             'parent_id' => $parentIdRules,
-            'slug' => ['required', 'string', 'max:255', 'regex:/^[a-z0-9]+(?:[a-z0-9\/-]*[a-z0-9])?$/', 'unique:pages,slug'],
+            'slug' => ['required', 'string', 'max:255', 'regex:/^[a-z0-9]+(?:[a-z0-9\/-]*[a-z0-9])?$/', 'unique:pages,slug', 'not_regex:/^(en|de)(\/|$)/'],
             'intro' => ['nullable', 'string', 'max:500'],
             'content' => ['nullable', 'string', 'max:50000'],
             'cover_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'extensions:jpg,jpeg,png,webp', 'max:8192'],
@@ -48,6 +48,13 @@ class StorePageRequest extends FormRequest
             'meta_description' => ['nullable', 'string', 'max:160'],
             'is_published' => ['nullable', 'boolean'],
             'menu_order' => ['required', 'integer', 'min:0', 'max:999999'],
+            'translations' => ['sometimes', 'array:en,de'],
+            'translations.*' => ['array:title,intro,content,meta_title,meta_description'],
+            'translations.*.title' => ['nullable', 'string', 'max:255'],
+            'translations.*.intro' => ['nullable', 'string', 'max:500'],
+            'translations.*.content' => ['nullable', 'string', 'max:50000'],
+            'translations.*.meta_title' => ['nullable', 'string', 'max:70'],
+            'translations.*.meta_description' => ['nullable', 'string', 'max:160'],
         ];
     }
 }

@@ -26,6 +26,7 @@ class Page extends Model
         'meta_description',
         'is_published',
         'menu_order',
+        'translations',
     ];
 
     protected function casts(): array
@@ -34,6 +35,7 @@ class Page extends Model
             'is_published' => 'boolean',
             'menu_order' => 'integer',
             'parent_id' => 'integer',
+            'translations' => 'array',
         ];
     }
 
@@ -55,6 +57,37 @@ class Page extends Model
     public function images(): HasMany
     {
         return $this->hasMany(PageImage::class)->orderBy('sort_order')->orderBy('id');
+    }
+
+    public function translated(string $field, ?string $locale = null): ?string
+    {
+        $locale ??= app()->getLocale();
+
+        $translation = $locale !== 'it' ? data_get($this->translations, "{$locale}.{$field}") : null;
+
+        return filled($translation) ? $translation : $this->getAttribute($field);
+    }
+
+    public function translatedLanguage(string $field, ?string $locale = null): string
+    {
+        $locale ??= app()->getLocale();
+
+        return $locale !== 'it' && filled(data_get($this->translations, "{$locale}.{$field}")) ? $locale : 'it';
+    }
+
+    public function isTranslated(string $locale): bool
+    {
+        if ($locale === 'it') {
+            return true;
+        }
+
+        foreach (['title', 'intro', 'content'] as $field) {
+            if (filled($this->getAttribute($field)) && blank(data_get($this->translations, "{$locale}.{$field}"))) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     #[Scope]

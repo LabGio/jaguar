@@ -218,4 +218,60 @@ class PublicSiteTest extends TestCase
         $this->assertDatabaseHas('contact_messages', ['email' => 'mario@example.test', 'subject' => 'Informazioni']);
         Mail::assertSent(ContactMessageReceived::class);
     }
+
+    public function test_translated_page_preserves_navigation_language_and_seo_alternates(): void
+    {
+        $page = Page::factory()->published()->create([
+            'title' => 'Azienda',
+            'slug' => 'azienda',
+            'intro' => 'Introduzione',
+            'content' => 'Testo italiano',
+            'translations' => [
+                'en' => ['title' => 'Company', 'intro' => 'Introduction', 'content' => 'English text'],
+            ],
+        ]);
+        PageImage::factory()->for($page)->create([
+            'alt_text' => 'Scarpa',
+            'translations' => ['en' => ['alt_text' => 'Shoe']],
+        ]);
+
+        $this->get('/en/azienda')->assertOk()
+            ->assertSee('<html lang="en">', false)
+            ->assertSee('English text')
+            ->assertSee('alt="Shoe"', false)
+            ->assertSee('href="'.route('localized.contact.create', ['locale' => 'en']).'"', false)
+            ->assertSee('hreflang="en"', false)
+            ->assertDontSee('name="robots" content="noindex,follow"', false);
+
+        $this->get('/de/azienda')->assertOk()
+            ->assertSee('<html lang="de">', false)
+            ->assertSee('lang="it">Testo italiano', false)
+            ->assertSee('name="robots" content="noindex,follow"', false);
+    }
+
+    public function test_translated_sitemap_excludes_pages_without_complete_translation(): void
+    {
+        Page::factory()->published()->create([
+            'slug' => 'azienda',
+            'title' => 'Azienda',
+            'intro' => null,
+            'content' => null,
+            'translations' => ['en' => ['title' => 'Company']],
+        ]);
+
+        $this->get('/sitemap.xml')->assertOk()
+            ->assertSee(route('pages.show', ['page' => 'azienda']), false)
+            ->assertSee(route('localized.pages.show', ['locale' => 'en', 'page' => 'azienda']), false)
+            ->assertDontSee(route('localized.pages.show', ['locale' => 'de', 'page' => 'azienda']), false);
+    }
+
+    public function test_contact_validation_is_localized(): void
+    {
+        $response = $this->from('/de/contatti')->post('/de/contatti', []);
+
+        $response->assertRedirect('/de/contatti');
+        $this->followRedirects($response)->assertOk()
+            ->assertSee('Bitte überprüfen Sie Ihre Angaben:')
+            ->assertSee('Das Feld Name ist erforderlich.');
+    }
 }

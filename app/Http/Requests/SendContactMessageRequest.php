@@ -21,4 +21,25 @@ class SendContactMessageRequest extends FormRequest
             'website' => ['nullable', 'max:0'],
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'required' => __('site.validation_required'),
+            'string' => __('site.validation_string'),
+            'email' => __('site.validation_email'),
+            'max' => __('site.validation_max'),
+        ];
+    }
+
+    public function attributes(): array
+    {
+        return [
+            'name' => __('site.name'),
+            'email' => 'Email',
+            'subject' => __('site.subject'),
+            'message' => __('site.message'),
+            'website' => 'Website',
+        ];
+    }
 }

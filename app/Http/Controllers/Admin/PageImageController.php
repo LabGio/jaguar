@@ -26,7 +26,12 @@ class PageImageController extends Controller
     public function update(Request $request, Page $page, PageImage $image): RedirectResponse
     {
         abort_unless($image->page_id === $page->id, 404);
-        $data = $request->validate(['alt_text' => ['nullable', 'string', 'max:255']]);
+        $data = $request->validate([
+            'alt_text' => ['nullable', 'string', 'max:255'],
+            'translations' => ['sometimes', 'array:en,de'],
+            'translations.*' => ['array:alt_text'],
+            'translations.*.alt_text' => ['nullable', 'string', 'max:255'],
+        ]);
         $image->update($data);
 
         return back()->with('status', 'Descrizione aggiornata.');

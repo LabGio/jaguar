@@ -32,6 +32,25 @@ Se `public/storage` non è un collegamento a `storage/app/public`, Laravel
 fornisce comunque i video caricati tramite il loro URL pubblico. Per gli altri
 file pubblici resta necessario configurare correttamente il collegamento.
 
+## Lingue del sito
+
+Il sito pubblico è disponibile in italiano, inglese e tedesco. Gli URL italiani
+esistenti restano invariati; le altre lingue usano i prefissi `/en` e `/de` e
+gli stessi slug. Gli slug `en`, `de` e quelli che iniziano con `en/` o `de/`
+sono riservati: eventuali pagine esistenti con questi slug devono essere
+rinominate prima di eseguire le migrazioni.
+
+Nell'amministrazione, che rimane in italiano, si possono inserire manualmente
+le traduzioni delle pagine, dei testi della homepage e del footer e delle
+descrizioni delle fotografie. I campi vuoti mostrano il contenuto italiano.
+Le pagine e la homepage con traduzioni incomplete restano navigabili, ma non
+sono incluse nella sitemap per quella lingua e riportano `noindex`. La
+traduzione automatica non è attiva.
+
+Prima di aggiornare un sito esistente, eseguire un backup del database e
+applicare le migrazioni. Il rollback della migrazione multilingua elimina le
+traduzioni salvate; non elimina i contenuti italiani originali.
+
 ## Contenuti dal vecchio WordPress
 
 `php artisan db:seed --class=DatabaseSeeder` importa la pagina Azienda, le

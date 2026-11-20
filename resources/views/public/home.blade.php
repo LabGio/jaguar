@@ -14,36 +14,36 @@
     @endif
     <div class="hero-shade"></div>
     <div class="wrap hero-content">
-        <p class="eyebrow light">Calzature · Made in Italy</p>
-        <h1>{{ $settings['hero_title'] ?? 'L’eccellenza prende forma.' }}</h1>
-        <p class="hero-subtitle">{{ $settings['hero_subtitle'] ?? 'Una presenza digitale progettata per raccontare la qualità, i materiali e le collezioni della vostra azienda.' }}</p>
-        @if ($collections->isNotEmpty())<a class="text-link light-link" href="#collezioni">Esplora le collezioni <span aria-hidden="true">↘</span></a>@endif
+        <p class="eyebrow light">{{ __('site.shoes') }}</p>
+        <h1 lang="{{ app(\App\Services\SiteSettings::class)->languageOf('hero_title') }}">{{ $settings['hero_title'] ?? __('site.hero_default') }}</h1>
+        <p class="hero-subtitle" lang="{{ app(\App\Services\SiteSettings::class)->languageOf('hero_subtitle') }}">{{ $settings['hero_subtitle'] ?? __('site.subtitle_default') }}</p>
+        @if ($collections->isNotEmpty())<a class="text-link light-link" href="#collezioni">{{ __('site.explore_collections') }} <span aria-hidden="true">↘</span></a>@endif
     </div>
     <span class="hero-index" aria-hidden="true">01 / Jaguar</span>
 </section>
 
 <section class="intro-section wrap section-space" data-reveal>
-    <div><p class="eyebrow">La nostra identità</p><span class="section-number">01 — Azienda</span></div>
+    <div><p class="eyebrow">{{ __('site.identity') }}</p><span class="section-number">01 — {{ __('site.company') }}</span></div>
     <div class="intro-copy">
-        <h2>{{ $settings['homepage_intro_title'] ?? 'Esperienza, ricerca e manifattura.' }}</h2>
-        <p class="body-copy preserve-lines">{{ $settings['homepage_intro_text'] ?? 'Aggiornate questa sezione dall’area amministrativa per presentare l’identità della vostra azienda.' }}</p>
+        <h2 lang="{{ app(\App\Services\SiteSettings::class)->languageOf('homepage_intro_title') }}">{{ $settings['homepage_intro_title'] ?? __('site.intro_title_default') }}</h2>
+        <p class="body-copy preserve-lines" lang="{{ app(\App\Services\SiteSettings::class)->languageOf('homepage_intro_text') }}">{{ $settings['homepage_intro_text'] ?? __('site.intro_default') }}</p>
     </div>
 </section>
 
 <section id="collezioni" class="collections-section section-space">
     <div class="wrap">
         <div class="section-heading" data-reveal>
-            <div><p class="eyebrow">Una storia da indossare</p><h2>Le collezioni</h2></div>
-            <span class="section-number">02 — Collezioni</span>
+            <div><p class="eyebrow">{{ __('site.story') }}</p><h2>{{ __('site.collections') }}</h2></div>
+            <span class="section-number">02 — {{ __('site.collections') }}</span>
         </div>
         <div class="collection-grid">
             @forelse ($collections as $collection)
-                <a href="{{ route('pages.show', ['page' => $collection->slug]) }}" class="collection-card" data-reveal>
+                <a href="{{ \App\Services\Localization::route('pages.show', ['page' => $collection->slug]) }}" class="collection-card" data-reveal>
                     <div class="collection-image"><img src="{{ Storage::disk('public')->url($collection->cover_image_path) }}" alt="" loading="lazy"></div>
-                    <div class="collection-caption"><div><span class="eyebrow">Collezione / {{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span><h3>{{ $collection->title }}</h3>@if ($collection->intro)<p>{{ $collection->intro }}</p>@endif</div><span class="card-arrow" aria-hidden="true">↗</span></div>
+                    <div class="collection-caption"><div><span class="eyebrow">{{ __('site.collection') }} / {{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span><h3 lang="{{ $collection->translatedLanguage('title') }}">{{ $collection->translated('title') }}</h3>@if ($collection->translated('intro'))<p lang="{{ $collection->translatedLanguage('intro') }}">{{ $collection->translated('intro') }}</p>@endif</div><span class="card-arrow" aria-hidden="true">↗</span></div>
                 </a>
             @empty
-                <p class="body-copy">Le collezioni pubblicate con una copertina compariranno qui.</p>
+                <p class="body-copy">{{ __('site.no_collections') }}</p>
             @endforelse
         </div>
     </div>
@@ -51,9 +51,9 @@
 
 <section class="craft-section section-space">
     <div class="wrap">
-        <div class="craft-heading" data-reveal><p class="eyebrow light">Il valore del saper fare</p><h2>La cura è nei dettagli.</h2><span class="section-number">03 — Manifattura</span></div>
+        <div class="craft-heading" data-reveal><p class="eyebrow light">{{ __('site.craft_value') }}</p><h2>{{ __('site.craft_heading') }}</h2><span class="section-number">03 — {{ __('site.craft') }}</span></div>
         <div class="craft-grid">
-            @foreach ([['01', 'Manifattura', 'Cura rigorosa in ogni passaggio produttivo.'], ['02', 'Materiali', 'Selezione attenta di pellami, componenti e finiture.'], ['03', 'Ricerca', 'Collezioni contemporanee con identità riconoscibile.']] as [$number, $title, $text])
+            @foreach ([['01', __('site.craft'), __('site.craft_text')], ['02', __('site.materials'), __('site.materials_text')], ['03', __('site.research'), __('site.research_text')]] as [$number, $title, $text])
                 <article data-reveal><span>{{ $number }}</span><h3>{{ $title }}</h3><p>{{ $text }}</p></article>
             @endforeach
         </div>

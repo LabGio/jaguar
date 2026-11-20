@@ -8,13 +8,21 @@ use App\Http\Controllers\AuthenticatedSessionController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PublicPageController;
+use App\Http\Middleware\SetPublicLocale;
 use App\Models\Page;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
-Route::get('/', HomeController::class)->name('home');
-Route::get('/contatti', [ContactController::class, 'create'])->name('contact.create');
-Route::post('/contatti', [ContactController::class, 'store'])->middleware('throttle:5,1')->name('contact.store');
+$publicRoutes = function (): void {
+    Route::get('/', HomeController::class)->name('home');
+    Route::get('/contatti', [ContactController::class, 'create'])->name('contact.create');
+    Route::post('/contatti', [ContactController::class, 'store'])->middleware('throttle:5,1')->name('contact.store');
+    Route::view('/cookie-policy', 'public.cookie-policy')->name('cookie-policy');
+};
+
+Route::middleware(SetPublicLocale::class)->group($publicRoutes);
+Route::prefix('{locale}')->where(['locale' => 'en|de'])->name('localized.')
+    ->middleware(SetPublicLocale::class)->group($publicRoutes);
 
 Route::get('/storage/home/video/{filename}', function (string $filename) {
     $disk = Storage::disk('public');
@@ -25,10 +33,11 @@ Route::get('/storage/home/video/{filename}', function (string $filename) {
     return response()->file($disk->path($path), ['X-Content-Type-Options' => 'nosniff']);
 })->where('filename', '[A-Za-z0-9]{40}\.(?:mp4|webm)');
 
-Route::view('/cookie-policy', 'public.cookie-policy')->name('cookie-policy');
 Route::get('/sitemap.xml', function () {
     return response()->view('public.sitemap', [
-        'pages' => Page::published()->orderBy('updated_at')->get(['slug', 'updated_at']),
+        'pages' => Page::published()->orderBy('updated_at')->get(),
+        'collections' => Page::published()->where('slug', '!=', 'azienda')->whereNotNull('cover_image_path')
+            ->orderBy('menu_order')->orderByDesc('updated_at')->limit(3)->get(),
     ], 200, ['Content-Type' => 'application/xml']);
 })->name('sitemap');
 
@@ -49,6 +58,12 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function (): v
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 });
 
+Route::get('/{locale}/{page:slug}', [PublicPageController::class, 'show'])
+    ->where(['locale' => 'en|de', 'page' => '[A-Za-z0-9][A-Za-z0-9\/-]*'])
+    ->middleware(SetPublicLocale::class)
+    ->name('localized.pages.show');
+
 Route::get('/{page:slug}', [PublicPageController::class, 'show'])
     ->where('page', '[A-Za-z0-9][A-Za-z0-9\/-]*')
+    ->middleware(SetPublicLocale::class)
     ->name('pages.show');

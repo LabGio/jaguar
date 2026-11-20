@@ -15,7 +15,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->useLangPath(resource_path('lang'));
     }
 
     /**
@@ -27,13 +27,13 @@ class AppServiceProvider extends ServiceProvider
 
         View::composer('layouts.public', function ($view): void {
             $view->with([
-                'siteSettings' => app(SiteSettings::class)->all(),
+                'siteSettings' => app(SiteSettings::class)->localized(),
                 'navigationPages' => Page::published()
                     ->whereNull('parent_id')
                     ->with('publishedChildren')
                     ->orderBy('menu_order')
                     ->orderBy('title')
-                    ->get(['id', 'title', 'slug', 'parent_id']),
+                    ->get(['id', 'title', 'slug', 'parent_id', 'translations']),
             ]);
         });
     }

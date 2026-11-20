@@ -11,7 +11,7 @@ class HomeController extends Controller
     public function __invoke(SiteSettings $settings): View
     {
         return view('public.home', [
-            'settings' => $settings->all(),
+            'settings' => $settings->localized(),
             'collections' => Page::published()
                 ->where('slug', '!=', 'azienda')
                 ->whereNotNull('cover_image_path')

@@ -14,7 +14,7 @@ class ContactController extends Controller
 {
     public function create(SiteSettings $settings): View
     {
-        return view('public.contact', ['settings' => $settings->all()]);
+        return view('public.contact', ['settings' => $settings->localized()]);
     }
 
     public function store(SendContactMessageRequest $request, SiteSettings $settings): RedirectResponse
@@ -24,6 +24,6 @@ class ContactController extends Controller
 
         Mail::to($recipient)->send(new ContactMessageReceived($message));
 
-        return back()->with('status', 'Grazie, la richiesta è stata inviata correttamente.');
+        return back()->with('status', __('site.contact_sent'));
     }
 }

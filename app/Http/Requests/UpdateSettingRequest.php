@@ -13,7 +13,7 @@ class UpdateSettingRequest extends FormRequest
 
     public function rules(): array
     {
-        return [
+        $rules = [
             'company_name' => ['nullable', 'string', 'max:255'],
             'address' => ['nullable', 'string', 'max:500'],
             'phone' => ['nullable', 'string', 'max:50'],
@@ -33,6 +33,14 @@ class UpdateSettingRequest extends FormRequest
             'hero_video' => ['nullable', 'file', 'mimetypes:video/mp4,video/webm', 'extensions:mp4,webm', 'max:51200'],
             'hero_video_mobile' => ['nullable', 'file', 'mimetypes:video/mp4,video/webm', 'extensions:mp4,webm', 'max:51200'],
         ];
+
+        foreach (['en', 'de'] as $locale) {
+            foreach (['footer_text', 'hero_title', 'hero_subtitle', 'homepage_intro_title', 'homepage_intro_text'] as $field) {
+                $rules["{$field}_{$locale}"] = $rules[$field];
+            }
+        }
+
+        return $rules;
     }
 
     public function messages(): array

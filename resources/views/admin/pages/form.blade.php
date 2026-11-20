@@ -10,6 +10,18 @@
     <label class="text-sm font-medium">Contenuto<textarea class="mt-1 w-full rounded border-stone-300" name="content" rows="10">{{ old('content', $page->content) }}</textarea></label>
     <div class="grid gap-6 md:grid-cols-2"><label class="text-sm font-medium">Immagine di copertina<input class="mt-1 block w-full text-sm" type="file" name="cover_image" accept=".jpg,.jpeg,.png,.webp">@if ($page->cover_image_path)<img class="mt-3 h-28 w-44 rounded object-cover" src="{{ Storage::disk('public')->url($page->cover_image_path) }}" alt="Copertina corrente">@endif</label><label class="text-sm font-medium">Ordine nel menu<input class="mt-1 w-full rounded border-stone-300" type="number" min="0" name="menu_order" value="{{ old('menu_order', $page->menu_order) }}" required></label></div>
     <div class="grid gap-6 md:grid-cols-2"><label class="text-sm font-medium">Meta title<input class="mt-1 w-full rounded border-stone-300" name="meta_title" maxlength="70" value="{{ old('meta_title', $page->meta_title) }}"></label><label class="text-sm font-medium">Meta description<input class="mt-1 w-full rounded border-stone-300" name="meta_description" maxlength="160" value="{{ old('meta_description', $page->meta_description) }}"></label></div>
+    @foreach (['en' => 'Inglese', 'de' => 'Tedesco'] as $locale => $language)
+        <fieldset class="grid gap-4 rounded border border-stone-200 p-4">
+            <legend class="px-2 text-lg font-semibold">{{ $language }}</legend>
+            <p class="text-sm text-stone-500">I campi vuoti mostrano il contenuto italiano.</p>
+            @foreach (['title' => 'Titolo', 'meta_title' => 'Meta title', 'meta_description' => 'Meta description'] as $field => $label)
+                <label class="text-sm font-medium">{{ $label }}<input class="mt-1 w-full rounded border-stone-300" name="translations[{{ $locale }}][{{ $field }}]" value="{{ old("translations.$locale.$field", data_get($page->translations, "$locale.$field")) }}"></label>
+            @endforeach
+            @foreach (['intro' => 'Descrizione introduttiva', 'content' => 'Contenuto'] as $field => $label)
+                <label class="text-sm font-medium">{{ $label }}<textarea class="mt-1 w-full rounded border-stone-300" name="translations[{{ $locale }}][{{ $field }}]" rows="4">{{ old("translations.$locale.$field", data_get($page->translations, "$locale.$field")) }}</textarea></label>
+            @endforeach
+        </fieldset>
+    @endforeach
     <label class="flex items-center gap-2 text-sm font-medium"><input type="hidden" name="is_published" value="0"><input type="checkbox" name="is_published" value="1" @checked(old('is_published', $page->is_published))> Pubblica la pagina</label>
     <div><button class="rounded bg-stone-950 px-5 py-3 text-sm font-semibold text-white">Salva pagina</button></div>
 </form>
@@ -21,6 +33,9 @@
     <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3" data-sortable>
         @foreach ($page->images as $image)<article class="rounded border border-stone-200 p-3" draggable="true" data-sortable-item><input form="reorder-images" type="hidden" name="image_ids[]" value="{{ $image->id }}"><img class="aspect-square w-full rounded object-cover" src="{{ Storage::disk('public')->url($image->thumbnail_path) }}" alt="{{ $image->alt_text }}"><p class="mt-2 cursor-grab text-xs text-stone-500">Trascina per riordinare</p>
         <div class="mt-3 flex gap-2"><input form="image-{{ $image->id }}" class="min-w-0 flex-1 rounded border-stone-300 text-sm" name="alt_text" value="{{ $image->alt_text }}" placeholder="Descrizione"><button form="image-{{ $image->id }}" class="text-sm underline">Salva</button></div>
+        @foreach (['en' => 'Inglese', 'de' => 'Tedesco'] as $locale => $language)
+            <label class="mt-2 block text-sm">{{ $language }}<input form="image-{{ $image->id }}" class="w-full rounded border-stone-300 text-sm" name="translations[{{ $locale }}][alt_text]" value="{{ data_get($image->translations, "$locale.alt_text") }}"></label>
+        @endforeach
         <form id="image-{{ $image->id }}" method="POST" action="{{ route('admin.pages.images.update', [$page, $image]) }}" class="hidden">@csrf @method('PATCH')</form>
         <form method="POST" action="{{ route('admin.pages.images.destroy', [$page, $image]) }}" class="mt-2">@csrf @method('DELETE')<button class="text-xs text-red-700 underline" onclick="return confirm('Eliminare questa fotografia?')">Elimina</button></form></article>@endforeach
     </div><button form="reorder-images" class="mt-5 rounded border border-stone-300 px-4 py-2 text-sm font-medium">Salva ordine</button>

@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Page;
+use App\Models\PageImage;
 use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
@@ -201,5 +202,67 @@ class AdminPageManagementTest extends TestCase
 
         $response->assertRedirect(route('admin.pages.create'));
         $response->assertSessionHasErrors('parent_id');
+    }
+
+    public function test_admin_can_save_page_and_site_translations(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+
+        $this->actingAs($admin)->post(route('admin.pages.store'), [
+            'title' => 'Azienda',
+            'slug' => 'azienda',
+            'menu_order' => 1,
+            'is_published' => '1',
+            'translations' => [
+                'en' => ['title' => 'Company', 'content' => 'English content'],
+                'de' => ['title' => 'Unternehmen'],
+            ],
+        ])->assertSessionHasNoErrors();
+
+        $this->assertSame('Company', Page::query()->where('slug', 'azienda')->firstOrFail()->translations['en']['title']);
+
+        $this->actingAs($admin)->put(route('admin.settings.update'), [
+            'hero_title' => 'Titolo italiano',
+            'hero_title_en' => 'English title',
+        ])->assertSessionHasNoErrors();
+
+        $this->get('/en')->assertOk()->assertSee('English title');
+        $this->get('/de')->assertOk()->assertSee('Titolo italiano');
+    }
+
+    public function test_language_prefixes_cannot_be_used_as_page_slugs(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+
+        $this->actingAs($admin)->post(route('admin.pages.store'), [
+            'title' => 'Pagina',
+            'slug' => 'en/azienda',
+            'menu_order' => 1,
+        ])->assertSessionHasErrors('slug');
+    }
+
+    public function test_admin_can_save_translated_image_description(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+        $page = Page::factory()->published()->create();
+        $image = PageImage::factory()->for($page)->create(['alt_text' => 'Scarpa']);
+
+        $this->actingAs($admin)->patch(route('admin.pages.images.update', [$page, $image]), [
+            'alt_text' => 'Scarpa',
+            'translations' => ['en' => ['alt_text' => 'Shoe'], 'de' => ['alt_text' => 'Schuh']],
+        ])->assertSessionHasNoErrors();
+
+        $this->assertSame('Schuh', $image->fresh()->translations['de']['alt_text']);
+    }
+
+    public function test_migration_reports_existing_reserved_slugs(): void
+    {
+        Page::factory()->create(['slug' => 'en/azienda']);
+        $migration = require database_path('migrations/2026_11_20_211354_add_translations_to_content_tables.php');
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Gli slug en e de sono riservati alle lingue');
+
+        $migration->up();
     }
 }

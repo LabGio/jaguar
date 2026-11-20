@@ -180,7 +180,7 @@ function showLightboxImage(index) {
     lightboxContent.alt = image.dataset.lightboxAlt || '';
     lightboxPrevious.disabled = lightboxImages.length < 2;
     lightboxNext.disabled = lightboxImages.length < 2;
-    lightboxCounter.textContent = `${currentLightboxIndex + 1} di ${lightboxImages.length}`;
+    lightboxCounter.textContent = `${currentLightboxIndex + 1} ${dialog.dataset.counterSeparator} ${lightboxImages.length}`;
 }
 
 dialog?.addEventListener('keydown', (event) => {
