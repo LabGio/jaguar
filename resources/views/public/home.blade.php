@@ -1,8 +1,14 @@
 @extends('layouts.public')
 @section('content')
 <section class="hero">
-    @if (! empty($settings['hero_video']))
-        <video class="hero-media" autoplay muted loop playsinline preload="metadata" poster="{{ ! empty($settings['hero_fallback']) ? Storage::disk('public')->url($settings['hero_fallback']) : '' }}" data-hero-video><source src="{{ Storage::disk('public')->url($settings['hero_video']) }}"></video>
+    @if (! empty($settings['hero_video']) || ! empty($settings['hero_video_mobile']))
+        @php
+            $desktopVideo = ! empty($settings['hero_video']) ? $settings['hero_video'] : $settings['hero_video_mobile'];
+            $mobileVideo = ! empty($settings['hero_video_mobile']) ? $settings['hero_video_mobile'] : $desktopVideo;
+            $poster = ! empty($settings['hero_fallback']) ? Storage::disk('public')->url($settings['hero_fallback']) : '';
+        @endphp
+        <video class="hero-media" autoplay muted loop playsinline preload="metadata" poster="{{ $poster }}" data-hero-video data-desktop-src="{{ Storage::disk('public')->url($desktopVideo) }}" data-mobile-src="{{ Storage::disk('public')->url($mobileVideo) }}"></video>
+        <noscript><video class="hero-media" autoplay muted loop playsinline preload="metadata" poster="{{ $poster }}" src="{{ Storage::disk('public')->url($desktopVideo) }}"></video></noscript>
     @elseif (! empty($settings['hero_fallback']))
         <img class="hero-media" src="{{ Storage::disk('public')->url($settings['hero_fallback']) }}" alt="" fetchpriority="high">
     @endif

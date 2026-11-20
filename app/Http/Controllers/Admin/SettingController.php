@@ -9,6 +9,7 @@ use App\Services\SiteSettings;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
+use RuntimeException;
 
 class SettingController extends Controller
 {
@@ -19,7 +20,7 @@ class SettingController extends Controller
 
     public function update(UpdateSettingRequest $request, SiteSettings $settings, ImageService $images): RedirectResponse
     {
-        $data = $request->safe()->except(['logo', 'hero_fallback', 'hero_video']);
+        $data = $request->safe()->except(['logo', 'hero_fallback', 'hero_video', 'hero_video_mobile']);
         $current = $settings->all();
 
         foreach (['logo', 'hero_fallback'] as $field) {
@@ -32,15 +33,28 @@ class SettingController extends Controller
             }
         }
 
-        if ($request->hasFile('hero_video')) {
-            if (isset($current['hero_video'])) {
-                Storage::disk('public')->delete($current['hero_video']);
-            }
+        $replacedVideos = [];
+        foreach (['hero_video', 'hero_video_mobile'] as $field) {
+            if ($request->hasFile($field)) {
+                $path = $request->file($field)->store('home/video', 'public');
+                if ($path === false) {
+                    throw new RuntimeException("Impossibile salvare il video {$field}.");
+                }
 
-            $data['hero_video'] = $request->file('hero_video')->store('home/video', 'public');
+                $data[$field] = $path;
+                if (! empty($current[$field])) {
+                    $replacedVideos[] = $current[$field];
+                }
+            }
         }
 
         $settings->save($data);
+
+        foreach ($replacedVideos as $path) {
+            if (! Storage::disk('public')->delete($path)) {
+                throw new RuntimeException("Impossibile eliminare il video sostituito: {$path}");
+            }
+        }
 
         return back()->with('status', 'Impostazioni salvate.');
     }

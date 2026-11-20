@@ -13,6 +13,7 @@ class HomeController extends Controller
         return view('public.home', [
             'settings' => $settings->all(),
             'collections' => Page::published()
+                ->where('slug', '!=', 'azienda')
                 ->whereNotNull('cover_image_path')
                 ->orderBy('menu_order')
                 ->orderByDesc('updated_at')

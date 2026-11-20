@@ -7,6 +7,29 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
+## Video della homepage
+
+In **Impostazioni sito** si possono caricare un video hero per desktop e tablet
+(consigliato 1920 × 1080) e uno per smartphone (consigliato 720 × 1280).
+Sono accettati MP4 e WebM fino a 50 MB ciascuno. Il video mobile viene
+selezionato fino a 700 px di larghezza; se è disponibile un solo video, viene
+usato su tutti i dispositivi. Senza JavaScript viene usato il video desktop,
+oppure quello mobile se è l'unico disponibile. L'immagine fallback è usata come
+poster durante il caricamento e quando non sono presenti video.
+I limiti del server possono essere inferiori: per caricare entrambi i video da
+50 MB nella stessa richiesta, configurare PHP con `upload_max_filesize` almeno
+`50M` e `post_max_size` maggiore di `100M`, oltre agli eventuali limiti del
+server web.
+
+## Contenuti dal vecchio WordPress
+
+`php artisan db:seed --class=DatabaseSeeder` importa la pagina Azienda, le
+collezioni Estate ’15, Inverno ’15-’16 e Nuova Collezione e le relative gallerie
+immagine. Le immagini originali vengono lette da `jaguar_immagini/` e copiate,
+ottimizzate, nel disco pubblico; il logo viene letto da
+`jaguar_immagini/jaguar.png`. Rieseguire il seeder riallinea testi e gallerie ai
+dati importati, sovrascrivendo eventuali modifiche amministrative a queste pagine.
+
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:

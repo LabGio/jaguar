@@ -1,0 +1,233 @@
+# Translation of Plugins - Cookie Notice &amp; Compliance for GDPR / CCPA - Stable (latest release) in Japanese
+# This file is distributed under the same license as the Plugins - Cookie Notice &amp; Compliance for GDPR / CCPA - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2022-03-21 22:32:46+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: GlotPress/4.0.0-alpha.1\n"
+"Language: ja_JP\n"
+"Project-Id-Version: Plugins - Cookie Notice &amp; Compliance for GDPR / CCPA - Stable (latest release)\n"
+
+#: includes/settings.php:567
+msgid "The text of the privacy policy button."
+msgstr "プライバシーポリシーボタンのテキスト。"
+
+#: includes/settings.php:58
+msgid "Manual"
+msgstr "手動"
+
+#: includes/settings.php:57
+msgid "Automatic"
+msgstr "自動"
+
+#: includes/settings.php:495
+msgid "Body"
+msgstr "ボディ"
+
+#: includes/settings.php:494
+msgid "Head"
+msgstr "Head"
+
+#: includes/settings.php:320
+msgid "Button class"
+msgstr "ボタン class"
+
+#: includes/settings.php:130 includes/settings.php:151
+#: includes/settings.php:303
+msgid "Privacy policy"
+msgstr "プライバシーポリシー"
+
+#: includes/settings.php:85
+msgid "An hour"
+msgstr "1時間"
+
+#: includes/settings.php:778
+msgid "Enter additional button CSS classes separated by spaces."
+msgstr "追加ボタンの CSS クラスをスペースで区切って入力します。"
+
+#: includes/settings.php:616
+msgid "Select the privacy policy link target."
+msgstr "プライバシーポリシーのリンク先を選択します。"
+
+#: includes/settings.php:599
+msgid "Synchronize with WordPress Privacy Policy page."
+msgstr "WordPress のプライバシーポリシーページと同期します。"
+
+#: includes/settings.php:564
+msgid "Enable privacy policy link."
+msgstr "プライバシーポリシーのリンクを有効にする。"
+
+#: includes/settings.php:307
+msgid "Reloading"
+msgstr "再読込"
+
+#: includes/settings.php:306
+msgid "Script blocking"
+msgstr "ブロックされるスクリプト"
+
+#: cookie-notice.php:560
+msgid "Settings"
+msgstr "設定"
+
+#: includes/settings.php:86
+msgid "1 day"
+msgstr "1日"
+
+#: includes/settings.php:148
+msgid "No"
+msgstr "いいえ"
+
+#: includes/settings.php:317
+msgid "Position"
+msgstr "位置"
+
+#: includes/settings.php:73 includes/settings.php:301
+msgid "Message"
+msgstr "メッセージ"
+
+#: includes/settings.php:582
+msgid "-- select page --"
+msgstr "-- ページを選択 --"
+
+#: includes/settings.php:91
+msgid "1 year"
+msgstr "1年"
+
+#: includes/settings.php:90
+msgid "6 months"
+msgstr "6ヶ月"
+
+#: includes/settings.php:89
+msgid "3 months"
+msgstr "3ヶ月"
+
+#: includes/settings.php:88
+msgid "1 month"
+msgstr "1ヶ月"
+
+#: includes/settings.php:87
+msgid "1 week"
+msgstr "1週間"
+
+#: includes/settings.php:99
+msgid "Slide"
+msgstr "スライド"
+
+#: includes/settings.php:98
+msgid "Fade"
+msgstr "フェード"
+
+#: includes/settings.php:79
+msgid "Bar color"
+msgstr "バーの色"
+
+#: includes/settings.php:77
+msgid "Text color"
+msgstr "テキスト色"
+
+#: includes/settings.php:62
+msgid "Page link"
+msgstr "ページリンク"
+
+#: includes/settings.php:63
+msgid "Custom link"
+msgstr "カスタムリンク"
+
+#: includes/settings.php:318
+msgid "Animation"
+msgstr "アニメーション"
+
+#: includes/settings.php:302
+msgid "Button text"
+msgstr "ボタンテキスト"
+
+#: includes/settings.php:263
+msgid "Reset to defaults"
+msgstr "デフォルトにリセット"
+
+#: includes/settings.php:147
+msgid "Ok"
+msgstr "OK"
+
+#: includes/settings.php:104
+msgid "Footer"
+msgstr "フッター"
+
+#: includes/settings.php:103
+msgid "Header"
+msgstr "ヘッダー"
+
+#: includes/settings.php:290 includes/settings.php:312
+msgid "Script placement"
+msgstr "スクリプト位置"
+
+#: includes/settings.php:606
+msgid "Enter the full URL starting with http(s)://"
+msgstr "http:// から始まる完全な URL を入力してください"
+
+#: includes/settings.php:593
+msgid "Select from one of your site's pages."
+msgstr "あなたのサイトのページから選択します"
+
+#: includes/settings.php:186 includes/welcome.php:401
+msgid "Cookie Notice"
+msgstr "Cookie Notice"
+
+#: includes/settings.php:951
+msgid "Settings restored to defaults."
+msgstr "設定を初期化しました。"
+
+#: includes/settings.php:92
+msgid "infinity"
+msgstr "無期限"
+
+#: includes/settings.php:451
+msgid "Enter the cookie notice message."
+msgstr "Cookie に関する通知の文章を入力します。"
+
+#: includes/settings.php:308
+msgid "On scroll"
+msgstr "スクロール時"
+
+#: includes/settings.php:472
+msgid "Enable to give to the user the possibility to refuse third party non functional cookies."
+msgstr "サードパーティの追跡 Cookie を拒否する選択肢をユーザに提供します。"
+
+#: includes/settings.php:690
+msgid "Select where all the plugin scripts should be placed."
+msgstr "スクリプトをどこに挿入するかを選択します。"
+
+#: includes/settings.php:146
+msgid "We use cookies to ensure that we give you the best experience on our website. If you continue to use this site we will assume that you are happy with it."
+msgstr "よりよいエクスペリエンスを提供するため、当ウェブサイトでは Cookie を使用しています。引き続き閲覧する場合、Cookie の使用を承諾したものとみなされます。"
+
+#: includes/settings.php:766
+msgid "Enable if you want all plugin data to be deleted on deactivation."
+msgstr "プラグインの無効化時にプラグインの全てのデータを削除したい場合、このオプションを有効化します。"
+
+#: includes/settings.php:291 includes/settings.php:313
+msgid "Deactivation"
+msgstr "無効化"
+
+#: includes/settings.php:976
+msgid "Are you sure you want to reset these settings to defaults?"
+msgstr "本当にこれらの設定を初期化してもよいですか ?"
+
+#: includes/settings.php:319
+msgid "Colors"
+msgstr "色"
+
+#: includes/settings.php:51 includes/settings.php:97
+msgid "None"
+msgstr "なし"
+
+#: includes/settings.php:46 includes/welcome.php:478
+msgid "Top"
+msgstr "上"
+
+#: includes/settings.php:47 includes/welcome.php:477
+msgid "Bottom"
+msgstr "下"

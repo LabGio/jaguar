@@ -27,7 +27,20 @@ if (siteHeader) {
 
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const heroVideo = document.querySelector('[data-hero-video]');
-if (heroVideo && reducedMotion.matches) heroVideo.pause();
+if (heroVideo) {
+    const mobileViewport = window.matchMedia('(max-width: 700px)');
+    const updateHeroVideo = () => {
+        const source = mobileViewport.matches ? heroVideo.dataset.mobileSrc : heroVideo.dataset.desktopSrc;
+        if (heroVideo.getAttribute('src') !== source) heroVideo.setAttribute('src', source);
+    };
+
+    if (reducedMotion.matches) {
+        heroVideo.autoplay = false;
+        heroVideo.pause();
+    }
+    updateHeroVideo();
+    mobileViewport.addEventListener('change', updateHeroVideo);
+}
 
 if ('IntersectionObserver' in window && !reducedMotion.matches) {
     const revealElements = document.querySelectorAll('[data-reveal]');

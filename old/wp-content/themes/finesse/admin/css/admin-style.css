@@ -1,0 +1,648 @@
+@charset "utf-8";
+/* CSS Document */
+
+/* ---------------------------------------------------------------------- */
+/* WordPress Admin Interface Styles
+/* ----------------------------------------------------------------------
+TABLE OF CONTENTS
+
+-Generic
+-Portfolio
+-Forms
+-Tabs
+-Accordion
+-Shortcodes
+-Widgets
+-Editor
+-Slider Manager
+-Translation Manager
+-Styling
+-IE7 & IE8
+------------------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------------- */
+/* Generic
+/* ---------------------------------------------------------------------- */
+.clearfix:before, .clearfix:after {
+    content: ".";
+    display: block;
+    height: 0;
+    overflow: hidden;
+}
+
+.clearfix:after {
+    clear: both;
+}
+
+.clearfix {
+    zoom: 1;
+}
+
+hr {
+    border: none;
+    height: 1px;
+    margin: 20px 0;
+    background-color: #dfdfdf;
+    color: #dfdfdf;
+}
+
+textarea {
+    overflow: auto; /* removes scroll bars in IE */
+}
+
+textarea, input, select {
+    margin: 0;
+}
+
+#sidebar-list {
+    margin-top: 10px;
+}
+
+input + .upload-button {
+    margin-left: 3px;
+}
+
+.button, .button-primary, .button-secondary {
+    margin-right: 3px;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Portfolio
+/* ---------------------------------------------------------------------- */
+
+/* Slides */
+
+ul.slides {
+    overflow: hidden;
+}
+
+ul.slides li {
+    float: left;
+    margin: 0 10px 10px 0;
+    background-color: #fff;
+    text-align: right;
+    border-bottom: 1px solid #dfdfdf;
+}
+
+ul.slides div {
+    width: 150px;
+    height: 150px;
+    overflow: hidden;
+}
+
+ul.slides img {
+    display: block;
+}
+
+ul.slides a {
+    display: inline-block;
+    padding: 5px 10px;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Forms
+/* ---------------------------------------------------------------------- */
+.generic-form {
+    margin-top: 20px;
+}
+
+.generic-form:first-child {
+    margin-top: 0;
+}
+
+.generic-form fieldset {
+    margin: 10px 0 20px;
+    border: 1px solid #dfdfdf;
+    background-color: #f5f5f5;
+    border-radius: 3px;
+    padding: 10px;
+}
+
+.generic-form legend {
+    background-color: #fff;
+    border: 1px solid #dfdfdf;
+    border-radius: 3px;
+    padding: 5px 10px;
+}
+
+.generic-form label {
+    width: 100px;
+    margin-right: 10px;
+}
+
+.generic-form label.error {
+    width: 200px;
+    margin-left: 110px;
+    margin-right: 0;
+}
+
+.generic-form label,
+.generic-form input[type="text"],
+.generic-form input[type="radio"],
+.generic-form input[type="checkbox"] {
+    float: left;
+}
+
+.generic-form input[type="radio"],
+.generic-form input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+.generic-form div {
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.generic-form input[type="text"],
+.generic-form textarea {
+    width: 400px;
+    padding: 4px 6px;
+}
+
+.generic-form textarea {
+    height: 150px;
+}
+
+.generic-form input[type="radio"] + label,
+.generic-form input[type="checkbox"] + label {
+    width: auto;
+}
+
+.generic-form .radio-row span {
+    float: left;
+    margin-right: 10px;
+}
+
+.generic-form .error {
+    color: #ff0000;
+    border-color: #ff0000;
+}
+
+.image-tab-content-left input[type="text"],
+.image-tab-content-left textarea,
+.image-tab-content-left select {
+    width: 300px;
+}
+
+.number-input {
+    width: 50px !important;
+}
+
+.number-input + span {
+    margin-left: 5px;
+}
+
+.slider-manager-left .generic-form input {
+    width: 160px;
+    float: none;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Tabs
+/* ---------------------------------------------------------------------- */
+.ui-tabs .ui-tabs-hide {
+    position: absolute;
+    left: -10000px;
+}
+
+.tabs {
+    margin-bottom: 20px;
+}
+
+.tabs ul.nav {
+    margin: 0;
+}
+
+.tabs ul.nav li {
+    float: left;
+    margin: 0 2px -1px 0;
+    position: relative;
+    z-index: 10;
+}
+
+.tabs ul.nav li a:link, .tabs ul.nav li a:visited {
+    display: block;
+    text-decoration: none;
+    padding: 5px 10px;
+    color: #666 !important;
+    background-color: #f5f5f5;
+    border: 1px solid #dfdfdf;
+    border-bottom: none;
+    border-radius: 3px 3px 0 0;
+}
+
+.tabs ul.nav li a:hover, .tabs ul.nav li a:active, .tabs ul.nav li.ui-state-active a {
+    color: #000 !important;
+}
+
+.tabs ul.nav li.ui-state-active a {
+    background-color: #fff;
+    padding-bottom: 6px; /* makes the unselected tabs appear above the border */
+    cursor: default;
+    outline: none;
+}
+
+.tabs .tab {
+    padding: 15px 10px;
+    background-color: #fff;
+    border: 1px solid #dfdfdf;
+    border-radius: 0 3px 3px 3px;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Accordion
+/* ---------------------------------------------------------------------- */
+#TB_ajaxContent .accordion {
+    margin-bottom: 20px;
+}
+
+span.accordion-title {
+    display: block;
+    position: relative; /* sets the initial position for the icon */
+    font-size: 1em; /* 12px */
+    line-height: 1.5em; /* 18px */
+    padding: 10px 10px 10px 40px;
+    margin: 0;
+    cursor: pointer;
+    background-color: #f5f5f5;
+    border: 1px solid #dfdfdf;
+    border-radius: 3px;
+
+    box-shadow: inset 0 1px 0 #fff;
+    text-shadow: 0 1px 0 #fff;
+    background-color: #f1f1f1;
+    background-image: -ms-linear-gradient(top, #f9f9f9, #ececec);
+    background-image: -moz-linear-gradient(top, #f9f9f9, #ececec);
+    background-image: -o-linear-gradient(top, #f9f9f9, #ececec);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#f9f9f9), to(#ececec));
+    background-image: -webkit-linear-gradient(top, #f9f9f9, #ececec);
+    background-image: linear-gradient(top, #f9f9f9, #ececec);
+}
+
+span.accordion-title.ui-state-active {
+    border-bottom: none;
+    border-radius: 3px 3px 0 0;
+}
+
+.accordion > div {
+    margin-bottom: 3px;
+    background-color: #f5f5f5;
+    background-image: -ms-linear-gradient(top, #f9f9f9, #f5f5f5);
+    background-image: -moz-linear-gradient(top, #f9f9f9, #f5f5f5);
+    background-image: -o-linear-gradient(top, #f9f9f9, #f5f5f5);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#f9f9f9), to(#f5f5f5));
+    background-image: -webkit-linear-gradient(top, #f9f9f9, #f5f5f5);
+    background-image: linear-gradient(top, #f9f9f9, #f5f5f5);
+}
+
+.accordion > div:first-child > span.accordion-title {
+    border-top: 1px solid #dfdfdf;
+}
+
+.accordion-inner {
+    padding: 15px 10px !important;
+    border: 1px solid #dfdfdf !important;
+    box-shadow: inset 0 1px 0 #fff;
+}
+
+.accordion .ui-icon {
+    position: absolute;
+    top: 9px;
+    left: 10px;
+    background-repeat: no-repeat;
+    background-position: left top;
+    background-image: url(../images/toggle-plus.png);
+    width: 20px;
+    height: 20px;
+}
+
+.accordion .ui-state-active .ui-icon {
+    background-image: url(../images/toggle-minus.png);
+}
+
+.accordion-inner .generic-form fieldset {
+    border: none;
+    margin: 0;
+    padding: 0;
+    border-radius: 0;
+    background: none;
+}
+
+.accordion-inner .generic-form legend {
+    background: none;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Shortcodes
+/* ---------------------------------------------------------------------- */
+.image-tab-content {
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+
+.image-tab-content-left {
+    float: left;
+    margin-right: 10px;
+}
+
+.image-tab-content-right {
+    float: left;
+}
+
+.image-tab-content-right img {
+    display: block;
+    padding: 4px;
+    border: 1px solid #dfdfdf;
+    background-color: #fff;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Widgets
+/* ---------------------------------------------------------------------- */
+.widgets-full-width .widget-holder {
+    background-color: #fcfcfc;
+    border-color: #dfdfdf;
+    padding: 10px;
+    border-width: 0 1px 1px;
+    border-style: none solid solid;
+    -webkit-border-bottom-right-radius: 3px;
+    -webkit-border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Editor
+/* ---------------------------------------------------------------------- */
+span.wp-sc-buttons-icon {
+    background: url("../images/shortcode/document-code.png") no-repeat scroll left top transparent;
+}
+
+span.wp-sc-buttons-icon {
+    display: inline-block;
+    height: 16px;
+    margin: 0 2px;
+    vertical-align: text-top;
+    width: 16px;
+}
+
+.page-media-editor-button, .page-contact-editor-button {
+    color: #21759B !important;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Slider Manager
+/* ---------------------------------------------------------------------- */
+
+.slider-manager-wrap, .slider-manager-wrap * {
+    margin: 0;
+    padding: 0;
+}
+
+.slider-manager-wrap {
+   padding-top: 13px;
+}
+
+.slider-manager-wrap img {
+    display: block;
+    max-width: 150px;
+    max-height: 150px;
+}
+
+.ui-draggable ui-draggable-dragging img {
+    max-width: 150px;
+    max-height: 150px;
+}
+
+.slider-manager-wrap ul {
+    list-style: none;
+}
+
+.type-img, .type-video {
+    position: absolute;
+    background: no-repeat center center;
+    right: -1px;
+    top: -1px;
+}
+
+.type-img {
+    background-image: url("../images/MD-photo.png");
+    width: 14px;
+    height: 10px;
+}
+
+.type-video {
+    background-image: url("../images/MD-video.png") ;
+    width: 10px;
+    height: 14px;
+}
+
+.add-caption-slider-slide-button, .edit-meta-slider-slide-button {
+    position: relative;
+    top: 5px;
+}
+
+.button-primary + .button-secondary {
+    margin-left: 3px;
+}
+
+/* Slider Left */
+
+.slider-manager-left {
+    float: left;
+    margin-right: 10px;
+    width: 186px;
+}
+
+.slider-manager-left .thumbs, .slider-manager-right .thumbs {
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+.slider-manager-left .thumbs li {
+    margin-bottom: 10px;
+}
+
+.slider-manager-left .thumbs li, .slider-manager-right .thumbs li {
+    background-color: #fff;
+    padding: 4px;
+    border: 1px solid #DFDFDF;
+    width: 150px;
+    height: 150px;
+    position: relative;
+}
+
+/* Slider Right */
+
+.slider-manager-right {
+    overflow: hidden;
+    position: relative;
+}
+
+#slider-manager-add-video {
+    position: absolute;
+    right: 0;
+}
+
+#slider-manager-add-video a {
+    float: left;
+    margin-left: 20px;
+    background: url("../images/plus_16.png") no-repeat left center;
+    padding-left: 22px;
+}
+
+.slider-manager-right .thumbs li {
+    float: left;
+    margin-right: 15px;
+    margin-bottom: 30px;
+}
+
+.delete-slider-slide-button {
+    position:  absolute;
+    right: -11px;
+    bottom: -11px;
+    background: #fff url("../images/delete_16.png") no-repeat center center;
+    border: 1px solid #dfdfdf;
+    width: 22px;
+    height: 22px;
+    border-radius: 11px;
+    text-indent: -10000em;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Translation Manager
+/* ---------------------------------------------------------------------- */
+
+.tm-msg-wrap {
+    margin-bottom: 5px;
+}
+
+.tm-msg {
+    width: 600px;
+}
+
+.tm-key {
+    width: 180px;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Styling
+/* ---------------------------------------------------------------------- */
+.of-color, .of-color-select {
+    float: left;
+    margin-left: 5px;
+}
+
+.option {
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.controls {
+    float: left;
+    margin-right: 10px;
+}
+
+.plugin-content {
+    margin-top: 15px;
+}
+
+.color-thumbs {
+    overflow: hidden;
+    margin: 0;
+}
+
+.color-thumbs li {
+    float: left;
+    margin: 0 5px 5px 0;
+}
+
+.color-thumbs a {
+    display: block;
+    width: 20px;
+    height: 20px;
+    box-shadow: 0 0 0 1px #333 inset;
+}
+
+.color-thumbs li a.selected {
+    box-shadow: 0 0 0 2px #333 inset;
+}
+
+.color-thumbs .orange {
+    background-color: #F25824;
+}
+
+.color-thumbs .green {
+    background-color: #7EB01A;
+}
+
+.color-thumbs .blue {
+    background-color: #4396BF;
+}
+
+.color-thumbs .light-orange {
+     background-color: #EB7F00;
+ }
+
+.color-thumbs .red {
+    background-color: #E53C3C;
+}
+
+.color-thumbs .purple {
+    background-color: #B28EB4;
+}
+
+.color-thumbs .pink {
+    background-color: #CE5C76;
+}
+
+.color-thumbs .teal {
+    background-color: #1693A5;
+}
+
+.color-thumbs .black {
+    background-color: #383838;
+}
+
+/* ---------------------------------------------------------------------- */
+/* IE7 & IE8
+/* ---------------------------------------------------------------------- */
+
+/* IE7 */
+
+*+html .generic-form fieldset {
+    position: relative;
+    margin-top: 25px;
+    padding-top: 20px;
+}
+
+*+html .generic-form legend {
+    position: absolute;
+    top: -15px;
+    left: 10px;
+}
+
+*+html #TB_ajaxContent {
+    position: relative;
+}
+
+/* IE8 */
+
+@media \0screen {
+    .generic-form fieldset {
+        position: relative;
+        margin-top: 25px;
+        padding-top: 20px;
+    }
+
+    .generic-form legend {
+        position: absolute;
+        top: -15px;
+        left: 10px;
+    }
+}

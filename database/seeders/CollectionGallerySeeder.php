@@ -12,58 +12,81 @@ use SplFileInfo;
 
 class CollectionGallerySeeder extends Seeder
 {
-    private const COLLECTION_COUNT = 5;
-
     private const MAX_COLLECTION_IMAGE_SIDE = 1920;
 
     private const MAX_THUMBNAIL_SIDE = 720;
 
     public function run(): void
     {
-        $this->deleteObsoleteCollections();
-
         $allOriginals = $this->collectOriginalImageFiles();
         $siteImages = array_values(array_filter($allOriginals, fn (array $item): bool => $item['year'] === '2013'));
-        $collectionImages = array_values(array_filter($allOriginals, fn (array $item): bool => $item['year'] !== '2013'));
+        $collections = [
+            [
+                'slug' => 'collezione-estate-15',
+                'title' => 'Collezione Estate ’15',
+                'images' => array_values(array_filter(
+                    $allOriginals,
+                    fn (array $image): bool => Str::startsWith(Str::lower($image['basename']), 'ant_2015'),
+                )),
+            ],
+            [
+                'slug' => 'collezione-inverno-15-16',
+                'title' => "Collezione Inverno '15-'16",
+                'images' => array_values(array_filter(
+                    $allOriginals,
+                    fn (array $image): bool => Str::startsWith(Str::lower($image['basename']), 'inv15_'),
+                )),
+            ],
+            [
+                'slug' => 'nuova-collezione',
+                'title' => 'Nuova Collezione',
+                'images' => array_values(array_filter(
+                    $allOriginals,
+                    fn (array $image): bool => $image['year'] === '2018',
+                )),
+            ],
+        ];
 
-        if ($collectionImages === []) {
-            $collectionImages = $allOriginals;
+        foreach ($collections as $collection) {
+            if ($collection['images'] === []) {
+                throw new RuntimeException(sprintf('Nessuna immagine trovata per %s.', $collection['title']));
+            }
         }
 
-        $chunks = $this->chunkEvenly($collectionImages, self::COLLECTION_COUNT);
+        $this->deletePlaceholderCollections();
 
-        for ($collectionNumber = 1; $collectionNumber <= self::COLLECTION_COUNT; $collectionNumber++) {
-            $slug = sprintf('collezioni/collezione-%02d', $collectionNumber);
+        foreach ($collections as $index => $collection) {
+            $collectionNumber = $index + 1;
             $page = Page::query()->updateOrCreate(
-                ['slug' => $slug],
+                ['slug' => $collection['slug']],
                 [
-                    'title' => sprintf('Collezione %02d', $collectionNumber),
-                    'intro' => 'Collezione di esempio predisposta per la presentazione dei prodotti.',
-                    'content' => 'Aggiorna testi, fotografie e metadati dall’area amministrativa.',
-                    'meta_title' => sprintf('Collezione %02d', $collectionNumber),
-                    'meta_description' => 'Collezione di esempio con galleria fotografica.',
+                    'title' => $collection['title'],
+                    'intro' => null,
+                    'content' => null,
+                    'meta_title' => $collection['title'],
+                    'meta_description' => null,
                     'is_published' => true,
-                    'menu_order' => $collectionNumber,
+                    'menu_order' => 20 + $index * 10,
                 ],
             );
 
             $this->deleteExistingGallery($page);
 
-            $this->importCollectionImages($page, $chunks[$collectionNumber - 1] ?? [], $collectionNumber);
+            $this->importCollectionImages($page, $collection['images'], $collectionNumber);
         }
 
         $companyPage = Page::query()->where('slug', 'azienda')->first();
         if ($companyPage !== null) {
             $this->deleteExistingGallery($companyPage);
-            $this->importCompanyGallery($companyPage, $siteImages);
+            $this->importCompanyGallery($companyPage, $allOriginals);
         }
 
         $this->importSiteAssets($siteImages);
     }
 
-    private function deleteObsoleteCollections(): void
+    private function deletePlaceholderCollections(): void
     {
-        for ($collectionNumber = self::COLLECTION_COUNT + 1; $collectionNumber <= 99; $collectionNumber++) {
+        for ($collectionNumber = 1; $collectionNumber <= 99; $collectionNumber++) {
             $slug = sprintf('collezioni/collezione-%02d', $collectionNumber);
             $page = Page::query()->where('slug', $slug)->first();
 
@@ -83,7 +106,7 @@ class CollectionGallerySeeder extends Seeder
     {
         $root = base_path('jaguar_immagini');
         if (! is_dir($root)) {
-            return [];
+            throw new RuntimeException(sprintf('Archivio immagini non trovato: %s', $root));
         }
 
         $paths = [];
@@ -126,26 +149,11 @@ class CollectionGallerySeeder extends Seeder
             return [$a['year'], $a['month'], $a['basename'], $a['path']] <=> [$b['year'], $b['month'], $b['basename'], $b['path']];
         });
 
+        if ($paths === []) {
+            throw new RuntimeException(sprintf('Nessuna immagine valida trovata in %s.', $root));
+        }
+
         return $paths;
-    }
-
-    /**
-     * @param  list<array{path:string, year:string, month:string, basename:string, width:int, height:int}>  $images
-     * @return list<list<array{path:string, year:string, month:string, basename:string, width:int, height:int}>>
-     */
-    private function chunkEvenly(array $images, int $chunks): array
-    {
-        if ($chunks <= 0) {
-            return [];
-        }
-
-        $result = array_fill(0, $chunks, []);
-        foreach ($images as $index => $image) {
-            $bucket = $index % $chunks;
-            $result[$bucket][] = $image;
-        }
-
-        return $result;
     }
 
     /**
@@ -153,30 +161,6 @@ class CollectionGallerySeeder extends Seeder
      */
     private function importCollectionImages(Page $page, array $images, int $collectionNumber): void
     {
-        if ($images === []) {
-            for ($imageNumber = 1; $imageNumber <= 10; $imageNumber++) {
-                $basePath = sprintf('pages/galleries/seed/collection-%02d-%02d', $collectionNumber, $imageNumber);
-                $path = $basePath.'.webp';
-                $thumbnailPath = $basePath.'-thumbnail.webp';
-
-                Storage::disk('public')->put($path, $this->makeImage($collectionNumber, $imageNumber, 1600, 1200));
-                Storage::disk('public')->put($thumbnailPath, $this->makeImage($collectionNumber, $imageNumber, 720, 540));
-
-                $page->images()->create([
-                    'path' => $path,
-                    'thumbnail_path' => $thumbnailPath,
-                    'alt_text' => sprintf('Collezione %02d, immagine %02d', $collectionNumber, $imageNumber),
-                    'sort_order' => $imageNumber,
-                ]);
-
-                if ($imageNumber === 1) {
-                    $page->update(['cover_image_path' => $path]);
-                }
-            }
-
-            return;
-        }
-
         foreach (array_values($images) as $index => $image) {
             $imageNumber = $index + 1;
             $basePath = sprintf('pages/galleries/imported/collection-%02d-%03d', $collectionNumber, $imageNumber);
@@ -200,17 +184,26 @@ class CollectionGallerySeeder extends Seeder
      */
     private function importCompanyGallery(Page $page, array $images): void
     {
-        $selected = array_values(array_filter($images, function (array $image): bool {
-            $lowerName = Str::lower($image['basename']);
-
-            return ! Str::contains($lowerName, ['logo', 'calzaturificio', 'sabrina_martone', 'frabrique']);
-        }));
+        $companyImageNames = [
+            'santamariamonte',
+            'santamariamonte2',
+            'il-montaggio',
+            'il-montaggio2',
+            'la-manovia',
+            'la-modelleria',
+            'lavora_pelle',
+            'montaggio',
+            'montaggio1',
+            'frabrique',
+        ];
+        $selected = array_values(array_filter(
+            $images,
+            fn (array $image): bool => in_array(Str::lower($image['basename']), $companyImageNames, true),
+        ));
 
         if ($selected === []) {
             return;
         }
-
-        $selected = array_slice($selected, 0, 24);
 
         foreach ($selected as $index => $image) {
             $imageNumber = $index + 1;
@@ -239,13 +232,9 @@ class CollectionGallerySeeder extends Seeder
             return;
         }
 
-        $logoSource = null;
-        foreach ($siteImages as $image) {
-            $name = Str::lower($image['basename']);
-            if (Str::contains($name, ['calzaturificiojaguar', 'logo2014', 'logo'])) {
-                $logoSource = $image['path'];
-                break;
-            }
+        $logoSource = base_path('jaguar_immagini/jaguar.png');
+        if (! is_file($logoSource)) {
+            throw new RuntimeException(sprintf('Logo non trovato: %s', $logoSource));
         }
 
         $heroSource = null;
@@ -258,10 +247,8 @@ class CollectionGallerySeeder extends Seeder
         }
 
         $settings = [];
-        if ($logoSource !== null) {
-            [$logoPath] = $this->storeOptimizedVariants($logoSource, 'settings/logo/imported-logo');
-            $settings['logo'] = $logoPath;
-        }
+        [$logoPath] = $this->storeOptimizedVariants($logoSource, 'settings/logo/imported-logo');
+        $settings['logo'] = $logoPath;
 
         if ($heroSource !== null) {
             [$heroPath] = $this->storeOptimizedVariants($heroSource, 'settings/hero_fallback/imported-hero');
@@ -361,54 +348,5 @@ class CollectionGallerySeeder extends Seeder
         }
 
         return $contents;
-    }
-
-    private function makeImage(int $collectionNumber, int $imageNumber, int $width, int $height): string
-    {
-        $image = imagecreatetruecolor($width, $height);
-        $hue = (($collectionNumber * 31) + ($imageNumber * 17)) % 360;
-        [$red, $green, $blue] = $this->hslToRgb($hue, 46, 34);
-        $background = imagecolorallocate($image, $red, $green, $blue);
-        $accent = imagecolorallocate($image, min(255, $red + 75), min(255, $green + 75), min(255, $blue + 75));
-        $dark = imagecolorallocate($image, max(0, $red - 50), max(0, $green - 50), max(0, $blue - 50));
-
-        imagefill($image, 0, 0, $background);
-        imagefilledellipse($image, (int) ($width * 0.3), (int) ($height * 0.35), (int) ($width * 0.75), (int) ($height * 0.75), $accent);
-        imagefilledellipse($image, (int) ($width * 0.75), (int) ($height * 0.72), (int) ($width * 0.8), (int) ($height * 0.8), $dark);
-        imagefilledrectangle($image, (int) ($width * 0.08), (int) ($height * 0.08), (int) ($width * 0.92), (int) ($height * 0.13), $dark);
-
-        ob_start();
-        imagewebp($image, null, 82);
-        $contents = ob_get_clean();
-        imagedestroy($image);
-
-        return $contents === false ? throw new RuntimeException('Impossibile generare l’immagine di esempio.') : $contents;
-    }
-
-    /**
-     * @return array{int, int, int}
-     */
-    private function hslToRgb(int $hue, int $saturation, int $lightness): array
-    {
-        $saturation /= 100;
-        $lightness /= 100;
-        $chroma = (1 - abs((2 * $lightness) - 1)) * $saturation;
-        $segment = $hue / 60;
-        $secondary = $chroma * (1 - abs(fmod($segment, 2) - 1));
-        [$red, $green, $blue] = match (true) {
-            $segment < 1 => [$chroma, $secondary, 0],
-            $segment < 2 => [$secondary, $chroma, 0],
-            $segment < 3 => [0, $chroma, $secondary],
-            $segment < 4 => [0, $secondary, $chroma],
-            $segment < 5 => [$secondary, 0, $chroma],
-            default => [$chroma, 0, $secondary],
-        };
-        $match = $lightness - ($chroma / 2);
-
-        return [
-            (int) round(($red + $match) * 255),
-            (int) round(($green + $match) * 255),
-            (int) round(($blue + $match) * 255),
-        ];
     }
 }

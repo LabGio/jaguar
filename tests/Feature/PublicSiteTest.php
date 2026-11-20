@@ -68,6 +68,48 @@ class PublicSiteTest extends TestCase
             ->assertSee(route('pages.show', ['page' => $collection->slug]), false);
     }
 
+    public function test_company_page_cover_is_not_listed_as_a_collection(): void
+    {
+        Page::factory()->published()->create([
+            'slug' => 'azienda',
+            'cover_image_path' => 'pages/company-cover.webp',
+        ]);
+        Page::factory()->published()->create([
+            'slug' => 'collezioni/speciale',
+            'cover_image_path' => 'pages/collection-cover.webp',
+        ]);
+
+        $response = $this->get(route('home'));
+
+        $response->assertOk()
+            ->assertSee('pages/collection-cover.webp')
+            ->assertDontSee('pages/company-cover.webp');
+    }
+
+    public function test_homepage_exposes_separate_responsive_video_sources(): void
+    {
+        config(['filesystems.disks.public.url' => '/storage']);
+        Setting::query()->create(['key' => 'hero_video', 'value' => 'settings/desktop.mp4']);
+        Setting::query()->create(['key' => 'hero_video_mobile', 'value' => 'settings/mobile.mp4']);
+
+        $this->get(route('home'))->assertOk()
+            ->assertSee('data-desktop-src="/storage/settings/desktop.mp4"', false)
+            ->assertSee('data-mobile-src="/storage/settings/mobile.mp4"', false)
+            ->assertSee('<noscript><video', false)
+            ->assertSee('src="/storage/settings/desktop.mp4"', false);
+    }
+
+    public function test_homepage_uses_the_only_video_as_fallback_for_both_viewports(): void
+    {
+        config(['filesystems.disks.public.url' => '/storage']);
+        Setting::query()->create(['key' => 'hero_video', 'value' => '']);
+        Setting::query()->create(['key' => 'hero_video_mobile', 'value' => 'settings/mobile.mp4']);
+
+        $this->get(route('home'))->assertOk()
+            ->assertSee('data-desktop-src="/storage/settings/mobile.mp4"', false)
+            ->assertSee('data-mobile-src="/storage/settings/mobile.mp4"', false);
+    }
+
     public function test_page_renders_managed_gallery_and_navigation(): void
     {
         $page = Page::factory()->published()->create(['title' => 'Collezione 01', 'slug' => 'collezioni/01']);

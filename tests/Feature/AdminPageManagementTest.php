@@ -3,13 +3,50 @@
 namespace Tests\Feature;
 
 use App\Models\Page;
+use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class AdminPageManagementTest extends TestCase
 {
     use LazilyRefreshDatabase;
+
+    public function test_admin_can_upload_and_replace_hero_videos_independently(): void
+    {
+        Storage::fake('public');
+        $admin = User::factory()->create(['role' => 'admin']);
+
+        $this->actingAs($admin)->put(route('admin.settings.update'), [
+            'hero_video' => UploadedFile::fake()->create('desktop.mp4', 100, 'video/mp4'),
+            'hero_video_mobile' => UploadedFile::fake()->create('mobile.webm', 100, 'video/webm'),
+        ])->assertRedirect()->assertSessionHasNoErrors();
+
+        $desktop = Setting::query()->where('key', 'hero_video')->value('value');
+        $mobile = Setting::query()->where('key', 'hero_video_mobile')->value('value');
+        Storage::disk('public')->assertExists([$desktop, $mobile]);
+
+        $this->actingAs($admin)->put(route('admin.settings.update'), [
+            'hero_video_mobile' => UploadedFile::fake()->create('new-mobile.mp4', 100, 'video/mp4'),
+        ])->assertRedirect()->assertSessionHasNoErrors();
+
+        $newMobile = Setting::query()->where('key', 'hero_video_mobile')->value('value');
+        $this->assertNotSame($mobile, $newMobile);
+        $this->assertSame($desktop, Setting::query()->where('key', 'hero_video')->value('value'));
+        Storage::disk('public')->assertMissing($mobile);
+        Storage::disk('public')->assertExists([$desktop, $newMobile]);
+    }
+
+    public function test_mobile_hero_video_rejects_invalid_files(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+
+        $this->actingAs($admin)->put(route('admin.settings.update'), [
+            'hero_video_mobile' => UploadedFile::fake()->create('invalid.txt', 1, 'text/plain'),
+        ])->assertSessionHasErrors('hero_video_mobile');
+    }
 
     public function test_guest_is_redirected_from_administration(): void
     {

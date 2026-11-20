@@ -1,0 +1,692 @@
+<?xml version="1.0"?>
+<options>
+
+    <section id="general-settings" title="General">
+        <category expanded="false" title="SEO Settings">
+            <option name="finesse_custom_seo_enabled" type="checkbox">
+                <default_value>on</default_value>
+                <suffix>Enable custom SEO</suffix>
+            </option>
+            <option name="finesse_page_keywords" type="text">
+                <description>Page keywords, separated by comma. (These keywords will be used by the search engines.)</description>
+            </option>
+            <option name="finesse_page_description" type="textarea">
+                <description>Page description</description>
+            </option>
+        </category>
+        <category expanded="false" title="Header Settings">
+            <option name="finesse_header_logo" type="upload-image">
+                <description>Upload your website header logo</description>
+            </option>
+            <option name="finesse_tagline" type="text">
+                <description>Logo tagline</description>
+            </option>
+            <option name="finesse_favicon" type="upload-image">
+                <description>Upload your website favicon</description>
+            </option>
+            <option name="finesse_display_search_header" type="checkbox">
+                <default_value>on</default_value>
+                <suffix>Display the search field at the right of the header menu</suffix>
+            </option>
+            <option name="finesse_header_type" type="select">
+                <description>Header type</description>
+                <default_value>default</default_value>
+                <possible_values>
+                    <value key="default">Default (email - phone - language switcher)</value>
+                    <value key="custom">Custom</value>
+                </possible_values>
+            </option>
+            <option name="finesse_header_custom_code" type="textarea">
+                <description>Custom header code (This will be taken into account only if the value of the Header Type is set to Custom.)</description>
+                <default_value/>
+            </option>
+        </category>
+        <category expanded="false" title="Footer Settings">
+            <option name="finesse_tracking_code" type="textarea">
+                <description>Website tracking code (e.g., Google Analytics)</description>
+            </option>
+            <option name="finesse_footer_text" type="textarea">
+                <description>Copyright text</description>
+                <default_value><![CDATA[ Copyright &copy; Finesse. Created by <a href="http://ixtendo.com/">Ixtendo</a>. ]]></default_value>
+            </option>
+        </category>
+        <category expanded="false" title="Contact Details">
+            <option name="finesse_contact_address" type="text">
+                <description>Address</description>
+            </option>
+            <option name="finesse_contact_email" type="text">
+                <description>Email address</description>
+            </option>
+            <option name="finesse_contact_phone" type="text">
+                <description>Phone number</description>
+            </option>
+            <option name="finesse_display_contact_details_in_header" type="checkbox">
+                <default_value>on</default_value>
+                <suffix>Display the contact details in the website header</suffix>
+            </option>
+        </category>
+        <category expanded="false" title="Captcha Settings">
+            <option name="finesse_captcha_enable" type="checkbox">
+                <default_value>off</default_value>
+                <suffix>Enable captcha for the theme forms</suffix>
+            </option>
+            <option name="finesse_captcha_public_key" type="text">
+                <description>ReCaptcha public key</description>
+            </option>
+            <option name="finesse_captcha_private_key" type="text">
+                <description>ReCaptcha private key</description>
+            </option>
+        </category>
+        <category expanded="false" title="RSS Settings">
+            <option name="finesse_rss_enabled" type="checkbox">
+                <default_value>on</default_value>
+                <suffix>Enable RSS</suffix>
+            </option>
+            <option name="finesse_rss_type" type="select">
+                <description>RSS Type</description>
+                <default_value>rss2_url</default_value>
+                <possible_values>
+                    <value key="rdf_url">RDF/RSS 1.0 feed</value>
+                    <value key="rss_url">RSS 0.92 feed</value>
+                    <value key="rss2_url">RSS 2.0 feed</value>
+                    <value key="atom_url">Atom feed</value>
+                </possible_values>
+            </option>
+        </category>
+        <category expanded="false" title="Enable Responsiveness">
+            <option name="finesse_responsive_enabled" type="checkbox">
+                <default_value>on</default_value>
+                <suffix>Enable responsiveness</suffix>
+            </option>
+        </category>
+        <category expanded="false" title="Internationalization">
+            <option name="finesse_internationalization_enabled" type="checkbox">
+                <default_value>off</default_value>
+                <suffix>Enable the internationalization for your website</suffix>
+            </option>
+        </category>
+        <category expanded="false" title="File Access Configuration">
+            <option name="finesse_file_access_ftp_enabled" type="checkbox">
+                <suffix>Use FTP to access the theme files</suffix>
+            </option>
+            <option name="finesse_file_access_ftp_hostname" type="text">
+                <description>FTP hostname.</description>
+            </option>
+            <option name="finesse_file_access_ftp_theme_path" type="text">
+                <description>FTP theme path (you can find it from CPanel)</description>
+            </option>
+            <option name="finesse_file_access_ftp_username" type="text">
+                <description>FTP username</description>
+            </option>
+            <option name="finesse_file_access_ftp_password" type="password">
+                <description>FTP password</description>
+            </option>
+        </category>
+    </section>
+
+    <section id="blog-settings" title="Blog &amp; Portfolio">
+        <category expanded="false" title="Blog Settings">
+            <option name="finesse_blog_display_post_meta" type="checkbox">
+                <suffix>Display the &quot;Post Meta&quot; information at the left of each blog post page</suffix>
+                <default_value>on</default_value>
+            </option>
+            <option name="finesse_blog_display_related_posts" type="checkbox">
+                <suffix>Display the &quot;Related Posts&quot; section at the end of each blog post page</suffix>
+                <default_value>on</default_value>
+            </option>
+            <option name="finesse_blog_display_post_comments" type="checkbox">
+                <suffix>Display the &quot;Comments&quot; section at the end of each blog post page</suffix>
+                <default_value>on</default_value>
+            </option>
+        </category>
+        <category expanded="false" title="Portfolio Settings">
+            <option name="finesse_portfolio_display_related_posts" type="checkbox">
+                <suffix>Display the &quot;Related Posts&quot; section at the end of each portfolio page</suffix>
+                <default_value>on</default_value>
+            </option>
+        </category>
+    </section>
+
+    <section id="social-settings" title="Social">
+        <category expanded="false" title="Twitter Settings">
+            <option name="finesse_social_twitter_username" type="text">
+                <description>Your Twitter username (e.g., ixtendo)</description>
+            </option>
+            <option name="finesse_social_twitter_api_url" type="text">
+                <description>API URL (default: http://api.twitter.com/1.1/)</description>
+                <default_value>http://api.twitter.com/1.1/</default_value>
+            </option>
+            <option name="finesse_social_twitter_consumer_key" type="text">
+                <description>Your consumer key</description>
+            </option>
+            <option name="finesse_social_twitter_consumer_secret" type="text">
+                <description>Your consumer secret</description>
+            </option>
+            <option name="finesse_social_twitter_access_token" type="text">
+                <description>Your access token</description>
+            </option>
+            <option name="finesse_social_twitter_access_token_secret" type="text">
+                <description>Your access token secret</description>
+            </option>
+        </category>
+        <category expanded="false" title="Facebook URL">
+            <option name="finesse_social_facebook_url" type="text">
+                <description>Your Facebook URL (e.g., http://www.facebook.com/pages/Ixtendo/326069630745266)</description>
+            </option>
+        </category>
+        <category expanded="false" title="Google +">
+            <option name="finesse_social_gplus_url" type="text">
+                <description>Your Google + URL</description>
+            </option>
+        </category>
+        <category expanded="false" title="LinkedIn URL">
+            <option name="finesse_social_linkedin_url" type="text">
+                <description>Your LinkedIn URL</description>
+            </option>
+        </category>
+        <category expanded="false" title="Youtube URL">
+            <option name="finesse_social_youtube_url" type="text">
+                <description>Your Youtube URL</description>
+            </option>
+        </category>
+        <category expanded="false" title="Skype URL">
+            <option name="finesse_social_skype_url" type="text">
+                <description>Your Skype URL</description>
+            </option>
+        </category>
+        <category expanded="false" title="Flickr ID">
+            <option name="finesse_social_flickr_id" type="text">
+                <description>Your Flickr ID (e.g., 52617155@N08)</description>
+            </option>
+        </category>
+    </section>
+
+    <section id="layout-settings" title="Layout">
+        <category expanded="true" title="Site Layout">
+            <option name="finesse_layout_type" type="select">
+                <description>Page Layout (default: Wide)</description>
+                <default_value>wide</default_value>
+                <possible_values>
+                    <value key="wide">Wide</value>
+                    <value key="boxed">Boxed</value>
+                </possible_values>
+            </option>
+        </category>
+    </section>
+
+    <section id="style-settings" title="Styles">
+        <category expanded="false" title="Color Schemes">
+            <option name="finesse_color_schema" type="select">
+                <description>Predefined Site Color (default: Orange)</description>
+                <default_value>orange</default_value>
+                <possible_values>
+                    <value key="orange">Orange</value>
+                    <value key="red">Red</value>
+                    <value key="green">Green</value>
+                    <value key="blue">Blue</value>
+                    <value key="light-orange">Light Orange</value>
+                    <value key="pink">Pink</value>
+                    <value key="purple">Purple</value>
+                    <value key="teal">Teal</value>
+                </possible_values>
+            </option>
+            <option name="finesse_custom_color_schema" type="text">
+                <description>Custom Site Color (the name of the CSS file located in the 'css/color' folder)</description>
+                <default_value/>
+            </option>
+        </category>
+
+        <category expanded="false" title="Wide Layout Backgrounds" displayCondition="is_layout_wide_selected">
+            <option name="finesse_wide_bg_pattern" type="predefined-patterns">
+                <description>Background Pattern (default: None)</description>
+                <default_value>none</default_value>
+                <possible_values>
+                    <value key="none">None</value>
+                    <value key="../images/background-patterns/wide/subtle-dots.png">Subtle Dots</value>
+                    <value key="../images/background-patterns/wide/swirl.png">Swirl</value>
+                    <value key="../images/background-patterns/wide/brilliant.png">Brilliant</value>
+                    <value key="../images/background-patterns/wide/dots.png">Dots</value>
+                    <value key="../images/background-patterns/wide/squares-and-crosses.png">Squares and Crosses</value>
+                    <value key="../images/background-patterns/wide/bricks.png">Bricks</value>
+                    <value key="../images/background-patterns/wide/squares.png">Squares</value>
+                </possible_values>
+            </option>
+            <option name="finesse_wide_bg_repeat" type="select">
+                <description>Background Pattern Repeat Mode (default: Both)</description>
+                <default_value>repeat</default_value>
+                <possible_values>
+                    <value key="repeat">Both</value>
+                    <value key="repeat-x">Repeat Horizontally</value>
+                    <value key="repeat-y">Repeat Vertically</value>
+                    <value key="no-repeat">No Repeat</value>
+                </possible_values>
+            </option>
+        </category>
+
+        <category expanded="false" title="Boxed Layout Backgrounds" displayCondition="is_layout_boxed_selected">
+            <option name="finesse_boxed_bg_pattern" type="predefined-patterns">
+                <description>Background Pattern (default: Grid)</description>
+                <default_value>../images/background-patterns/boxed/grid.png</default_value>
+                <possible_values>
+                    <value key="none">None</value>
+                    <value key="../images/background-patterns/boxed/grid.png">Grid</value>
+                    <value key="../images/background-patterns/boxed/first_aid_kit.png">First Aid Kit</value>
+                    <value key="../images/background-patterns/boxed/graphy.png">Graphy</value>
+                    <value key="../images/background-patterns/boxed/kuji.png">Kuji</value>
+                    <value key="../images/background-patterns/boxed/norwegian_rose.png">Norwegian Rose</value>
+                    <value key="../images/background-patterns/boxed/office.png">Office</value>
+                    <value key="../images/background-patterns/boxed/px_by_Gre3g.png">PX by Gre3g</value>
+                    <value key="../images/background-patterns/boxed/squares.png">Squares</value>
+                    <value key="../images/background-patterns/boxed/vichy.png">Vichy</value>
+                    <value key="../images/background-patterns/boxed/washi.png">Washi</value>
+                    <value key="../images/background-patterns/boxed/classy_fabric.png">Classy Fabric</value>
+                    <value key="../images/background-patterns/boxed/farmer.png">Farmer</value>
+                    <value key="../images/background-patterns/boxed/low_contrast_linen.png">Low Contrast Linen</value>
+                    <value key="../images/background-patterns/boxed/mirrored_squares.png">Mirrored Squares</value>
+                    <value key="../images/background-patterns/boxed/nasty_fabric.png">Nasty Fabric</value>
+                    <value key="../images/background-patterns/boxed/otis_redding.png">Otis Redding</value>
+                    <value key="../images/background-patterns/boxed/ravenna.png">Ravenna</value>
+                    <value key="../images/background-patterns/boxed/soft_wallpaper.png">Soft Wallpaper</value>
+                    <value key="../images/background-patterns/boxed/tiny_grid.png">Tiny Grid</value>
+                    <value key="../images/background-patterns/boxed/wavecut.png">Wavecut</value>
+                    <value key="../images/background-patterns/boxed/whitey.png">Whitey</value>
+                </possible_values>
+            </option>
+            <option name="finesse_boxed_bg_repeat" type="select">
+                <description>Background Pattern Repeat Mode (default: Both)</description>
+                <default_value>repeat</default_value>
+                <possible_values>
+                    <value key="repeat">Both</value>
+                    <value key="repeat-x">Repeat Horizontally</value>
+                    <value key="repeat-y">Repeat Vertically</value>
+                    <value key="no-repeat">No Repeat</value>
+                </possible_values>
+            </option>
+            <option name="finesse_boxed_bg_color" type="predefined-colors"  displayCondition="is_boxed_layout_selected">
+                <description>Background Color (default: #d9d9d9)</description>
+                <default_value>#d9d9d9</default_value>
+                <possible_values>
+                    <value key="#d9d9d9">Grey</value>
+                    <value key="#262626">Dark Grey</value>
+                    <value key="#e53c3c">Red</value>
+                    <value key="#7eb01a">Green</value>
+                    <value key="#4396bf">Blue</value>
+                    <value key="#f25824">Orange</value>
+                    <value key="#eb7f00">Light Orange</value>
+                    <value key="#ce5c76">Pink</value>
+                    <value key="#b28eb4">Purple</value>
+                    <value key="#1693a5">Teal</value>
+                </possible_values>
+            </option>
+        </category>
+
+        <category expanded="false" title="Main Menu Style (Advanced)">
+            <option name="finesse_mm_bg_color" type="gradient">
+                <description>Background Color (default: #ffffff,#f2f2f2)</description>
+                <default_value>#ffffff,#f2f2f2</default_value>
+            </option>
+            <option name="finesse_mm_border_color" type="color">
+                <description>Border Color (default: #e5e5e5)</description>
+                <default_value>#e5e5e5</default_value>
+            </option>
+            <option name="finesse_mm_link_color" type="color">
+                <description>Link Color (default: #383838)</description>
+                <default_value>#383838</default_value>
+            </option>
+            <option name="finesse_mm_selected_bg_color" type="color">
+                <description>Selected Background Color (default: #383838)</description>
+                <default_value>#383838</default_value>
+            </option>
+            <option name="finesse_mm_selected_link_color" type="color">
+                <description>Selected Link Color (default: #ffffff)</description>
+                <default_value>#ffffff</default_value>
+            </option>
+
+            <option name="finesse_mm_child_bg_color" type="color">
+                <description>Child Background Color (default: #383838)</description>
+                <default_value>#383838</default_value>
+            </option>
+            <option name="finesse_mm_child_border_top_color" type="color">
+                <description>Child Border Top Color (default: #4d4d4d)</description>
+                <default_value>#4d4d4d</default_value>
+            </option>
+            <option name="finesse_mm_child_border_bottom_color" type="color">
+                <description>Child Border Bottom Color (default: #262626)</description>
+                <default_value>#262626</default_value>
+            </option>
+            <option name="finesse_mm_child_link_color" type="color">
+                <description>Child Link Color (default: #ffffff)</description>
+                <default_value>#ffffff</default_value>
+            </option>
+        </category>
+
+
+        <category expanded="false" title="Text &amp; Links Color (Advanced)">
+            <option name="finesse_link_color" type="color">
+                <description>Link Color (default: #f25824)</description>
+                <default_value>#f25824</default_value>
+            </option>
+            <option name="finesse_body_text_color" type="color">
+                <description>Body Text Color (default: #383838)</description>
+                <default_value>#383838</default_value>
+            </option>
+            <option name="finesse_navigation_text_color" type="color">
+                <description>Navigation Text Color (default: #ffffff)</description>
+                <default_value>#ffffff</default_value>
+            </option>
+            <option name="finesse_grey_text_color" type="color">
+                <description>Grey Text Color (default: #ffffff)</description>
+                <default_value>#ffffff</default_value>
+            </option>
+            <option name="finesse_secondary_text_color" type="color">
+                <description>Secondary Text Color (default: #999999)</description>
+                <default_value>#999999</default_value>
+            </option>
+        </category>
+
+        <category expanded="false" title="Backgrounds Color (Advanced)">
+            <option name="finesse_slider_nav_arrows_bg_color" type="color">
+                <description>Slider Navigation Arrows Background Color (default: #F25824)</description>
+                <default_value>#F25824</default_value>
+            </option>
+            <option name="finesse_button_bg_color" type="color">
+                <description>Button Background Color (default: #F25824)</description>
+                <default_value>#F25824</default_value>
+            </option>
+            <option name="finesse_pt_highlight_bg_color" type="color">
+                <description>Pricing Table Highlight Background Color (default: #d93e0b)</description>
+                <default_value>#d93e0b</default_value>
+            </option>
+            <option name="finesse_table_row_hover_bg_color" type="color">
+                <description>Table Row Hover Background Color (default: #fcf1ed)</description>
+                <default_value>#fcf1ed</default_value>
+            </option>
+            <option name="finesse_text_selection_bg_color" type="color">
+                <description>Selection Text Background Color (default: #f25824)</description>
+                <default_value>#f25824</default_value>
+            </option>
+        </category>
+
+        <category expanded="false" title="Borders (Advanced)">
+            <option name="finesse_general_border_color" type="color">
+                <description>General Border Color(default: #f25824)</description>
+                <default_value>#f25824</default_value>
+            </option>
+            <option name="finesse_pb_header_border_color" type="color">
+                <description>Pricing Box Highlight Header Border Color (default: #d93e0b)</description>
+                <default_value>#d93e0b</default_value>
+            </option>
+        </category>
+
+        <category expanded="false" title="Player (Advanced)">
+            <option name="finesse_player_controls_bg_color" type="gradient">
+                <description>Player Controls Background Color (default: #F25824,#D93E0B)</description>
+                <default_value>#F25824,#D93E0B</default_value>
+            </option>
+            <option name="finesse_player_controls_focus_color" type="color">
+                <description>Player Controls Focus Color (default: #F25824)</description>
+                <default_value>#F25824</default_value>
+            </option>
+        </category>
+
+        <category expanded="false" title="Sprites (Advanced)">
+            <option name="finesse_social_links_bg_position" type="text">
+                <description>Social Links Background Position (default: left -25px)</description>
+                <default_value>left -25px</default_value>
+            </option>
+            <option name="finesse_team_member_social_links_bg_position" type="text">
+                <description>Team Member Social Links Background Position(default: left -17px)</description>
+                <default_value>left -17px</default_value>
+            </option>
+            <option name="finesse_icon_box_bg_position" type="text">
+                <description>Icon Box Background Position(default: left top)</description>
+                <default_value>left top</default_value>
+            </option>
+        </category>
+
+    </section>
+
+    <section id="typography-settings" title="Typography">
+        <category expanded="false" title="Body (Advanced)">
+            <option name="finesse_body_font_family" type="font">
+                <description>Font Family (default: 'Open Sans', sans-serif)</description>
+                <default_value>'Open Sans', sans-serif</default_value>
+            </option>
+            <option name="finesse_body_font_size" type="text">
+                <description>Font Size (default: 12px)</description>
+                <default_value>12px</default_value>
+                <suffix>em/px</suffix>
+            </option>
+            <option name="finesse_body_line_height" type="text">
+                <description>Line Height (default: 1.5em)</description>
+                <default_value>1.5em</default_value>
+                <suffix>em/px</suffix>
+            </option>
+        </category>
+        <category expanded="false" title="Main Navigation">
+            <option name="finesse_main_navigation_font_family" type="font">
+                <description>Font Family (default: 'Open Sans', sans-serif)</description>
+                <default_value>'Open Sans', sans-serif</default_value>
+            </option>
+            <option name="finesse_main_navigation_font_size" type="text">
+                <description>Font Size (default: 12px)</description>
+                <default_value>12px</default_value>
+                <suffix>em/px</suffix>
+            </option>
+        </category>
+        <category expanded="false" title="Main Navigation Drop Down">
+            <option name="finesse_main_navigation_dd_font_family" type="font">
+                <description>Font Family (default: 'Open Sans', sans-serif)</description>
+                <default_value>'Open Sans', sans-serif</default_value>
+            </option>
+            <option name="finesse_main_navigation_dd_font_size" type="text">
+                <description>Font Size (default: 12px)</description>
+                <default_value>12px</default_value>
+                <suffix>em/px</suffix>
+            </option>
+            <option name="finesse_main_navigation_dd_line_height" type="text">
+                <description>Line Height (default: 1.5em)</description>
+                <default_value>1.5em</default_value>
+                <suffix>em/px</suffix>
+            </option>
+        </category>
+        <category expanded="false" title="Header Tagline (Advanced)">
+            <option name="finesse_header_tagline_font_family" type="font">
+                <description>Font Family (default: 'Open Sans', sans-serif)</description>
+                <default_value>'Open Sans', sans-serif</default_value>
+            </option>
+            <option name="finesse_header_tagline_font_size" type="text">
+                <description>Font Size (default: 12px)</description>
+                <default_value>12px</default_value>
+                <suffix>em/px</suffix>
+            </option>
+            <option name="finesse_header_tagline_line_height" type="text">
+                <description>Line Height (default: 1.5em)</description>
+                <default_value>1.5em</default_value>
+                <suffix>em/px</suffix>
+            </option>
+            <option name="finesse_header_tagline_font_weight" type="select">
+                <description>Font Weight (default: normal)</description>
+                <default_value>normal</default_value>
+                <possible_values ref="available_font_weights"/>
+            </option>
+            <option name="finesse_header_tagline_font_style" type="select">
+                <description>Font Style (default: normal)</description>
+                <default_value>normal</default_value>
+                <possible_values>
+                    <value key="normal">Normal</value>
+                    <value key="italic">Italic</value>
+                    <value key="oblique">Oblique</value>
+                </possible_values>
+            </option>
+        </category>
+        <category expanded="false" title="Header Contact Info (Advanced)">
+            <option name="finesse_header_contact_font_family" type="font">
+                <description>Font Family (default: 'Open Sans', sans-serif)</description>
+                <default_value>'Open Sans', sans-serif</default_value>
+            </option>
+            <option name="finesse_header_contact_font_size" type="text">
+                <description>Font Size (default: 12px)</description>
+                <default_value>12px</default_value>
+                <suffix>em/px</suffix>
+            </option>
+            <option name="finesse_header_contact_line_height" type="text">
+                <description>Line Height (default: 1.5em)</description>
+                <default_value>1.5em</default_value>
+                <suffix>em/px</suffix>
+            </option>
+            <option name="finesse_header_contact_font_weight" type="select">
+                <description>Font Weight (default: normal)</description>
+                <default_value>normal</default_value>
+                <possible_values ref="available_font_weights"/>
+            </option>
+            <option name="finesse_header_contact_font_style" type="select">
+                <description>Font Style (default: normal)</description>
+                <default_value>normal</default_value>
+                <possible_values>
+                    <value key="normal">Normal</value>
+                    <value key="italic">Italic</value>
+                    <value key="oblique">Oblique</value>
+                </possible_values>
+            </option>
+        </category>
+        <category expanded="false" title="H1 (Advanced)">
+            <option name="finesse_h1_font_family" type="font">
+                <description>Font Family (default: 'Open Sans', sans-serif)</description>
+                <default_value>'Open Sans', sans-serif</default_value>
+            </option>
+            <option name="finesse_h1_font_weight" type="select">
+                <description>Font Weight (default: 300)</description>
+                <default_value>300</default_value>
+                <possible_values ref="available_font_weights"/>
+            </option>
+            <option name="finesse_h1_font_size" type="text">
+                <description>Font Size (default: 2.333em)</description>
+                <default_value>2.333em</default_value>
+                <suffix>em/px</suffix>
+            </option>
+            <option name="finesse_h1_line_height" type="text">
+                <description>Line Height (default: 1.214em)</description>
+                <default_value>1.214em</default_value>
+                <suffix>em/px</suffix>
+            </option>
+        </category>
+        <category expanded="false" title="H2 (Advanced)">
+            <option name="finesse_h2_font_family" type="font">
+                <description>Font Family (default: 'Open Sans', sans-serif)</description>
+                <default_value>'Open Sans', sans-serif</default_value>
+            </option>
+            <option name="finesse_h2_font_weight" type="select">
+                <description>Font Weight (default: Bold)</description>
+                <default_value>bold</default_value>
+                <possible_values ref="available_font_weights"/>
+            </option>
+            <option name="finesse_h2_font_size" type="text">
+                <description>Font Size (default: 1.5em)</description>
+                <default_value>1.5em</default_value>
+                <suffix>em/px</suffix>
+            </option>
+            <option name="finesse_h2_line_height" type="text">
+                <description>Line Height (default: 1.333em)</description>
+                <default_value>1.333em</default_value>
+                <suffix>em/px</suffix>
+            </option>
+        </category>
+        <category expanded="false" title="H3 (Advanced)">
+            <option name="finesse_h3_font_family" type="font">
+                <description>Font Family (default: 'Open Sans', sans-serif)</description>
+                <default_value>'Open Sans', sans-serif</default_value>
+            </option>
+            <option name="finesse_h3_font_weight" type="select">
+                <description>Font Weight (default: 600)</description>
+                <default_value>600</default_value>
+                <possible_values ref="available_font_weights"/>
+            </option>
+            <option name="finesse_h3_font_size" type="text">
+                <description>Font Size (default: 1.333em)</description>
+                <default_value>1.333em</default_value>
+                <suffix>em/px</suffix>
+            </option>
+            <option name="finesse_h3_line_height" type="text">
+                <description>Line Height (default: 1.375em)</description>
+                <default_value>1.375em</default_value>
+                <suffix>em/px</suffix>
+            </option>
+        </category>
+        <category expanded="false" title="H4 (Advanced)">
+            <option name="finesse_h4_font_family" type="font">
+                <description>Font Family (default: 'Open Sans', sans-serif)</description>
+                <default_value>'Open Sans', sans-serif</default_value>
+            </option>
+            <option name="finesse_h4_font_weight" type="select">
+                <description>Font Weight (default: 600)</description>
+                <default_value>600</default_value>
+                <possible_values ref="available_font_weights"/>
+            </option>
+            <option name="finesse_h4_font_size" type="text">
+                <description>Font Size (default: 1.166em)</description>
+                <default_value>1.166em</default_value>
+                <suffix>em/px</suffix>
+            </option>
+            <option name="finesse_h4_line_height" type="text">
+                <description>Line Height (default: 1.428em)</description>
+                <default_value>1.428em</default_value>
+                <suffix>em/px</suffix>
+            </option>
+        </category>
+        <category expanded="false" title="H5 (Advanced)">
+            <option name="finesse_h5_font_family" type="font">
+                <description>Font Family (default: 'Open Sans', sans-serif)</description>
+                <default_value>'Open Sans', sans-serif</default_value>
+            </option>
+            <option name="finesse_h5_font_weight" type="select">
+                <description>Font Weight (default: Normal)</description>
+                <default_value>normal</default_value>
+                <possible_values ref="available_font_weights"/>
+            </option>
+            <option name="finesse_h5_font_size" type="text">
+                <description>Font Size (default: 1.083em)</description>
+                <default_value>1.083em</default_value>
+                <suffix>em/px</suffix>
+            </option>
+            <option name="finesse_h5_line_height" type="text">
+                <description>Line Height (default: 1.461em)</description>
+                <default_value>1.461em</default_value>
+                <suffix>em/px</suffix>
+            </option>
+        </category>
+        <category expanded="false" title="H6 (Advanced)">
+            <option name="finesse_h6_font_family" type="font">
+                <description>Font Family (default: 'Open Sans', sans-serif)</description>
+                <default_value>'Open Sans', sans-serif</default_value>
+            </option>
+            <option name="finesse_h6_font_weight" type="select">
+                <description>Font Weight (default: Bold)</description>
+                <default_value>bold</default_value>
+                <possible_values ref="available_font_weights"/>
+            </option>
+            <option name="finesse_h6_font_size" type="text">
+                <description>Font Size (default: 1em)</description>
+                <default_value>1em</default_value>
+                <suffix>em/px</suffix>
+            </option>
+            <option name="finesse_h6_line_height" type="text">
+                <description>Line Height (default: 1.5em)</description>
+                <default_value>1.5em</default_value>
+                <suffix>em/px</suffix>
+            </option>
+        </category>
+        <category expanded="false" title="Caption Heading Font (Advanced)">
+            <option name="finesse_caption_heading_font_size" type="text">
+                <description>Font Size (default: 1.666em)</description>
+                <default_value>1.666em</default_value>
+                <suffix>em/px</suffix>
+            </option>
+            <option name="finesse_caption_heading_line_height" type="text">
+                <description>Line Height (default: 1.3em)</description>
+                <default_value>1.3em</default_value>
+                <suffix>em/px</suffix>
+            </option>
+        </category>
+    </section>
+</options>
