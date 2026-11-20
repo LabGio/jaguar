@@ -33,7 +33,10 @@
     </section>
     <dialog class="lightbox" data-lightbox aria-label="Visualizzazione immagine">
         <button type="button" class="lightbox-close" data-lightbox-close aria-label="Chiudi galleria">Chiudi <span aria-hidden="true">×</span></button>
+        <button type="button" class="lightbox-navigation lightbox-previous" data-lightbox-previous aria-label="Immagine precedente"><span aria-hidden="true">←</span></button>
         <img src="" alt="" data-lightbox-content>
+        <button type="button" class="lightbox-navigation lightbox-next" data-lightbox-next aria-label="Immagine successiva"><span aria-hidden="true">→</span></button>
+        <p class="lightbox-counter" data-lightbox-counter aria-live="polite"></p>
     </dialog>
 @endif
 @endsection

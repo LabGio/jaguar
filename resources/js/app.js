@@ -166,22 +166,45 @@ if ('IntersectionObserver' in window && !reducedMotion.matches) {
 
 const dialog = document.querySelector('[data-lightbox]');
 const lightboxContent = document.querySelector('[data-lightbox-content]');
+const lightboxImages = Array.from(document.querySelectorAll('[data-lightbox-image]'));
+const lightboxPrevious = document.querySelector('[data-lightbox-previous]');
+const lightboxNext = document.querySelector('[data-lightbox-next]');
+const lightboxCounter = document.querySelector('[data-lightbox-counter]');
+let currentLightboxIndex = 0;
+
+function showLightboxImage(index) {
+    currentLightboxIndex = (index + lightboxImages.length) % lightboxImages.length;
+    const image = lightboxImages[currentLightboxIndex];
+
+    lightboxContent.src = image.dataset.lightboxImage;
+    lightboxContent.alt = image.dataset.lightboxAlt || '';
+    lightboxPrevious.disabled = lightboxImages.length < 2;
+    lightboxNext.disabled = lightboxImages.length < 2;
+    lightboxCounter.textContent = `${currentLightboxIndex + 1} di ${lightboxImages.length}`;
+}
 
 dialog?.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') {
         event.preventDefault();
         dialog.close();
+    } else if (event.key === 'ArrowLeft') {
+        event.preventDefault();
+        showLightboxImage(currentLightboxIndex - 1);
+    } else if (event.key === 'ArrowRight') {
+        event.preventDefault();
+        showLightboxImage(currentLightboxIndex + 1);
     }
 });
 
-document.querySelectorAll('[data-lightbox-image]').forEach((button) => {
+lightboxImages.forEach((button, index) => {
     button.addEventListener('click', () => {
-        lightboxContent.src = button.dataset.lightboxImage;
-        lightboxContent.alt = button.dataset.lightboxAlt || '';
+        showLightboxImage(index);
         dialog.showModal();
     });
 });
 
+lightboxPrevious?.addEventListener('click', () => showLightboxImage(currentLightboxIndex - 1));
+lightboxNext?.addEventListener('click', () => showLightboxImage(currentLightboxIndex + 1));
 document.querySelector('[data-lightbox-close]')?.addEventListener('click', () => dialog.close());
 dialog?.addEventListener('click', (event) => {
     if (event.target === dialog) dialog.close();
