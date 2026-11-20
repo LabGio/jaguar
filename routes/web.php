@@ -10,10 +10,20 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PublicPageController;
 use App\Models\Page;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 Route::get('/', HomeController::class)->name('home');
 Route::get('/contatti', [ContactController::class, 'create'])->name('contact.create');
 Route::post('/contatti', [ContactController::class, 'store'])->middleware('throttle:5,1')->name('contact.store');
+
+Route::get('/storage/home/video/{filename}', function (string $filename) {
+    $disk = Storage::disk('public');
+    $path = "home/video/{$filename}";
+
+    abort_unless($disk->exists($path), 404);
+
+    return response()->file($disk->path($path), ['X-Content-Type-Options' => 'nosniff']);
+})->where('filename', '[A-Za-z0-9]{40}\.(?:mp4|webm)');
 
 Route::view('/cookie-policy', 'public.cookie-policy')->name('cookie-policy');
 Route::get('/sitemap.xml', function () {

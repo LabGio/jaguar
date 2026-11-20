@@ -8,11 +8,51 @@ use App\Models\PageImage;
 use App\Models\Setting;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class PublicSiteTest extends TestCase
 {
     use LazilyRefreshDatabase;
+
+    public function test_homepage_video_is_publicly_accessible_without_a_storage_symlink(): void
+    {
+        Storage::fake('public');
+        $filename = str_repeat('a', 40).'.mp4';
+        Storage::disk('public')->put("home/video/{$filename}", pack('N', 24).'ftypisom'.pack('N', 0).'isomiso2');
+
+        $response = $this->withHeader('Range', 'bytes=4-7')->get("/storage/home/video/{$filename}");
+
+        $response->assertStatus(206)
+            ->assertHeader('Content-Type', 'video/mp4')
+            ->assertHeader('Content-Range', 'bytes 4-7/24');
+        ob_start();
+        $response->baseResponse->sendContent();
+        $this->assertSame('ftyp', ob_get_clean());
+    }
+
+    public function test_homepage_webm_video_is_publicly_accessible_in_a_subdirectory(): void
+    {
+        Storage::fake('public');
+        $filename = str_repeat('c', 40).'.webm';
+        Storage::disk('public')->put("home/video/{$filename}", "\x1a\x45\xdf\xa3\x9f\x42\x86\x81\x01\x42\xf7\x81\x01\x42\xf2\x81\x04\x42\xf3\x81\x08\x42\x82\x84webm\x42\x87\x81\x02\x42\x85\x81\x02");
+
+        $this->call('GET', "/project/jaguar/public/storage/home/video/{$filename}", server: [
+            'SCRIPT_NAME' => '/project/jaguar/public/index.php',
+            'SCRIPT_FILENAME' => '/www/project/jaguar/public/index.php',
+        ])->assertOk()
+            ->assertHeader('Content-Type', 'video/webm');
+    }
+
+    public function test_homepage_video_fallback_does_not_expose_other_files(): void
+    {
+        Storage::fake('public');
+        $filename = str_repeat('a', 40);
+        Storage::disk('public')->put("home/video/{$filename}.txt", 'private');
+
+        $this->get("/storage/home/video/{$filename}.txt")->assertForbidden();
+        $this->get('/storage/home/video/'.str_repeat('b', 40).'.webm')->assertNotFound();
+    }
 
     public function test_homepage_is_accessible(): void
     {

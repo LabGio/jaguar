@@ -28,6 +28,9 @@ maggiore di `100M`. L'area amministrativa segnala gli errori di formato e carica
 se PHP rifiuta una richiesta troppo grande, suggerisce di caricare un video alla
 volta. Un eventuale blocco imposto direttamente dal server web può invece
 comparire prima che l'applicazione riesca a mostrare il proprio messaggio.
+Se `public/storage` non è un collegamento a `storage/app/public`, Laravel
+fornisce comunque i video caricati tramite il loro URL pubblico. Per gli altri
+file pubblici resta necessario configurare correttamente il collegamento.
 
 ## Contenuti dal vecchio WordPress
 
